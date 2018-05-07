@@ -1,0 +1,91 @@
+BubbleSort[A_] :=
+  Module[{PassCounter, a, b, c, d, debug = True, NewList, NewList2},
+   
+   NewList = A;
+   
+   For[PassCounter = 1, PassCounter <= Length[A] - 1, PassCounter++,
+    
+    For[b = 1, b <= Length[A] - PassCounter, b++,
+      
+      If[ NewList[[b]] > NewList[[b + 1]],
+        
+        If[debug == False,
+         
+         Print["entered the if statement, this is Newlist[[b]]"];
+         Print[NewList[[b]]];
+         Print[NewList[[b + 1]]];
+         ];(*end debug*)
+        
+        (*this swaps the two consectutive elements in the list if*)
+        (*the element on the left is larger han the one on the right*)
+
+        
+        NewList2 = NewList;
+        NewList[[b]] = NewList2[[b + 1]];
+        NewList[[b + 1]] = NewList2[[b]];
+        
+        ];(*end if*)
+      ];(*end inner for*)
+    ];(*end outer for*)
+   Return[NewList];
+   ];(*end module*)
+   (******************************)
+   (******************************)
+   (******************************)
+   (******************************)
+   
+   BubbleSort2[A_] :=
+  Module[{PassCounter, a, b, c, d, debug = True, NewList, NewList2, 
+    counter, ChecksMade},
+   
+   NewList = A;
+   counter = 0;
+   ChecksMade = 0;
+   For[PassCounter = 1, PassCounter <= Length[A] - 1, PassCounter++,
+    
+    For[b = 1, b <= Length[A] - PassCounter, b++,
+     
+     ChecksMade = ChecksMade + 1;
+     
+     If[debug == False,
+      Print["This is the counter currently"];
+      Print[counter];
+      ];(*end debug*)
+     
+     If[ NewList[[b]] > NewList[[b + 1]],
+      
+      counter = counter + 1;
+      
+      If[debug == False,
+       
+       Print["entered the if statement, this is Newlist[[b]]"];
+       Print[NewList[[b]]];
+       Print[NewList[[b + 1]]];
+       ];(*end debug*)
+      
+      (*this swaps the two consectutive elements in the list if*)
+      (*the element on the left is larger han the one on the right*)
+      NewList2 = NewList;
+      NewList[[b]] = NewList2[[b + 1]];
+      NewList[[b + 1]] = NewList2[[b]];
+      
+      ];(*end if*)
+     ];(*end inner for*)
+    
+    (*This if statement sees if there were any swaps in the inner for \
+loop*)
+    (*if no swaps were made, 
+    this stops the program and returns the list*)
+    (*thats completely sorted*)
+    If[counter == 0,
+     Print[
+      "The program did this many checks before getting the sorted \
+list"];
+     Print[ChecksMade];
+     Return[NewList];
+     ];(*end if*)
+    
+    
+    ];(*end outer for*)
+   Return[NewList];
+   ];(*end module*)
