@@ -1,0 +1,2325 @@
+Writing Music in Mathematica
+Introduction:
+There is a lot of mathematics behind the core structure of anything and everything related to music.  This Mathematica notebook will give the reader a better understanding of music and how to compose it using Built-in Mathematica Functions
+
+Body:
+There are several ways to produce sound using Mathematica.  The first method I will use to produce sound involves manipulating the sine wave using the built in Play function.
+
+
+Plot[Sin[x], {x, - 2 Pi, 2  Pi}]
+
+
+The sine curve is the visual representation of a sound wave.  Changing the length of the period of the sine graph will change the sound it will produce.  The longer the period is, the lower the sounding note will be.
+
+
+Play[Sin[440*2 Pi*t], {t, 0, 1}]
+Play[Sin[220*2 Pi*t], {t, 0, 1}]
+
+Sound[
+SampledSoundFunction[
+CompiledFunction[{10, 11., 5444}, {
+Blank[Integer]}, {{2, 0, 0}, {3, 0, 
+   5}}, {{1., {3, 0, 6}}, {440, {2, 0, 1}}, {0.000125, {3, 0, 1}}, {
+    3.141592653589793, {3, 0, 4}}, {2, {2, 0, 2}}, {0., {3, 0, 0}}}, {0, 3, 7,
+    0, 0}, {{10, 0, 2}, {16, 1, 2, 3}, {13, 0, 3, 2}, {10, 1, 3}, {10, 2, 
+    5}, {16, 3, 5, 4, 2, 3}, {40, 1, 3, 0, 3, 3, 0, 5}, {13, 5, 0, 5}, {16, 5,
+     6, 5}, {1}}, 
+Function[{Play`Time8}, 
+Block[{t = 0. + 0.000125 Play`Time8}, (Sin[((440 2) Pi) t] + 0.) 1.]], 
+   Evaluate], 8000, 8000]]
+
+Sound[
+SampledSoundFunction[
+CompiledFunction[{10, 11., 5444}, {
+Blank[Integer]}, {{2, 0, 0}, {3, 0, 
+   5}}, {{1., {3, 0, 6}}, {0.000125, {3, 0, 1}}, {
+    3.141592653589793, {3, 0, 4}}, {2, {2, 0, 2}}, {220, {2, 0, 1}}, {
+    0., {3, 0, 0}}}, {0, 3, 7, 0, 
+   0}, {{10, 0, 2}, {16, 1, 2, 3}, {13, 0, 3, 2}, {10, 1, 3}, {10, 2, 5}, {16,
+     3, 5, 4, 2, 3}, {40, 1, 3, 0, 3, 3, 0, 5}, {13, 5, 0, 5}, {16, 5, 6, 
+    5}, {1}}, 
+Function[{Play`Time9}, 
+Block[{t = 0. + 0.000125 Play`Time9}, (Sin[((220 2) Pi) t] + 0.) 1.]], 
+   Evaluate], 8000, 8000]]
+
+
+
+There is also a direct correlation between these two frequencies; since on curve is exactly half of the other, they are in fact the same note, but one is being played an octave lower.  
+Knowing this, we can create every single note.  But, even though we can produce each different note in any octave we want, we cannot play them simultaneously.  So if we wanted to write music using this method, there would be no room for any harmony.  
+
+This is a cool method to observe how sounds are actually produced, but it is very ineffective if you want to write music this way.
+
+There are built-in functions called SoundNote and Sound.  SoundNote can have a bunch of different parameters. It can have one parameter where it just produces a note, two parameters where plays a note for a specified duration, three parameters where it plays a note for a length of time by a specified instrument, or four parameters where it does all of the above but you can specify rendering options for that note.  For this project, we will focus on the first three options.
+
+Sound produces a pop-up that what let you hear what the input list of sounds would actually sound.  You cannot use SoundNote alone, as the program will not produce any sound without the built-in Sound function.  Sound can have two different parameters.  The first one is just one parameter where it produces audio from sound functions, and the second does the same thing as the first, but you can specify the duration of the audio. 
+
+The following are examples of the first three options for SoundNote
+
+Sound[SoundNote[0]]
+Sound[SoundNote["C", 1]]
+Sound[SoundNote["C4", 1, "Piano"]]
+
+Sound[
+SoundNote[0]]
+
+Sound[
+SoundNote["C", 1]]
+
+Sound[
+SoundNote["C4", 1, "Piano"]]
+
+Note: For simplicity reasons, let the "1" in the timing represent a quarter-note, or one beat for short.  
+
+As you can see, notes can be represented multiple ways.  Notes can be written as an integer between -48 and 60, where each number represents a unique pitch.  You can also specify the note you want using a string containing the desired note.  For example, 0 is the same as "C4", -1 is "B3", -2 is "Bb3", etc. all the way down to "C0".  The number after each note represents the octave in which the note will be played, 0 meaning its the lowest that note can possibly be, 1 meaning an octave above that, all the way to C9.  Also important to note, if you do not include the number after the note letter in a string, ex. "C", Mathematica will assume the missing number is 4.  This is true for every note input without a number following it.
+
+The following is a full list of notes and their equivalences.
+
+
+Notes = {{"C0", -48}, {"C#0", -47}, {"Db0", -47}, {"D0", -46}, {"D#0", -45}, \
+{"Eb0", -45}, {"E0", -44}, {"F0", -43}, {"F#0", -42}, {"Gb0", -42}, {"G0", \
+-41}, {"G#0", -40}, {"Ab0", -40}, {"A0", -39}, {"A#0", -38}, {"Bb0", -38}, \
+{"B0", -37},(**){"C1", -36}, {"C#1", -35}, {"Db1", -35}, {"D1", -34}, {"D#1", \
+-33}, {"Eb1", -33}, {"E1", -32}, {"F1", -31}, {"F#1", -30}, {"Gb1", -30}, \
+{"G1", -29}, {"G#1", -28}, {"Ab1", -28}, {"A1", -27}, {"A#1", -26}, {"Bb1", \
+-26}, {"B1", -25},(**){"C2", -24}, {"C#2", -23}, {"Db2", -23}, {"D2", -22}, \
+{"D#2", -21}, {"Eb2", -21}, {"E2", -20}, {"F2", -19}, {"F#2", -18}, {"Gb2", \
+-18}, {"G2", -17}, {"G#2", -16}, {"Ab2", -16}, {"A2", -15}, {"A#2", -14}, \
+{"Bb2", -14}, {"B2", -13},(**){"C3", -12}, {"C#3", -11}, {"Db3", -11}, {"D3", \
+-10}, {"D#3", -9}, {"Eb3", -9}, {"E3", -8}, {"F3", -7}, {"F#3", -6}, {"Gb3", \
+-6}, {"G3", -5}, {"G#3", -4}, {"Ab3", -4}, {"A3", -3}, {"A#3", -2}, {"Bb3", \
+-2}, {"B3", -1},(**){"C4", 0}, {"C#4", 1}, {"Db4", 1}, {"D4", 2}, {"D#4", 
+    3}, {"Eb4", 3}, {"E4", 4}, {"F4", 5}, {"F#4", 6}, {"Gb4", 6}, {"G4", 
+    7}, {"G#4", 8}, {"Ab4", 8}, {"A4", 9}, {"A#4", 10}, {"Bb4", 10}, {"B4", 
+    11},(**){"C", 0}, {"C#", 1}, {"Db", 1}, {"D", 2}, {"D#", 3}, {"Eb", 
+    3}, {"E", 4}, {"F", 5}, {"F#", 6}, {"Gb", 6}, {"G", 7}, {"G#", 8}, {"Ab", 
+    8}, {"A", 9}, {"A#", 10}, {"Bb", 10}, {"B", 11},(**){"C5", 12}, {"C#5", 
+    13}, {"Db5", 13}, {"D5", 14}, {"D#5", 15}, {"Eb5", 15}, {"E5", 16}, {"F5",
+     17}, {"F#5", 18}, {"Gb5", 18}, {"G5", 19}, {"G#5", 20}, {"Ab5", 
+    20}, {"A5", 21}, {"A#5", 22}, {"Bb5", 22}, {"B5", 23},(**){"C6", 
+    24}, {"C#6", 25}, {"Db6", 25}, {"D6", 26}, {"D#6", 27}, {"Eb6", 
+    27}, {"E6", 28}, {"F6", 29}, {"F#6", 30}, {"Gb6", 30}, {"G6", 31}, {"G#6",
+     32}, {"Ab6", 32}, {"A6", 33}, {"A#6", 34}, {"Bb6", 34}, {"B6", 
+    35},(**){"C7", 36}, {"C#7", 37}, {"Db7", 37}, {"D7", 38}, {"D#7", 
+    39}, {"Eb7", 39}, {"E7", 40}, {"F7", 41}, {"F#7", 42}, {"Gb7", 42}, {"G7",
+     43}, {"G#7", 44}, {"Ab7", 44}, {"A7", 45}, {"A#7", 46}, {"Bb7", 
+    46}, {"B7", 47},(**){"C8", 48}, {"C#8", 49}, {"Db8", 49}, {"D8", 
+    50}, {"D#8", 51}, {"Eb8", 51}, {"E8", 52}, {"F8", 53}, {"F#8", 
+    54}, {"Gb8", 54}, {"G8", 55}, {"G#8", 56}, {"Ab8", 56}, {"A8", 
+    57}, {"A#8", 58}, {"Bb8", 58}, {"B8", 59}, {"C9", 60}};
+
+
+If we were writing a song that only used quarter-notes and was played on the piano, the first SoundNote example would suffice.  However, most music isn't like that, so this version of SoundNote would note be efficient/useful in most cases.  The second version, we can now vary the lengths of notes, but we still won't be able to have different instruments play.  So the best method for writing music in Mathematica, using the built-in Sound and SoundNote functions, would be the third way.  
+
+Even though it is the most efficient way, this has not been optimized completely yet; we still cannot produce two sound at once.  There are two ways to solve it, both methods involve using sets.
+
+If we want to write something that has one instrument sound two or more different notes at the same time, in the same rhythm, we can create a set in the first SoundNote parameter.
+
+
+Sound[SoundNote[{0, 4}, 1, "Piano"]]
+Sound[SoundNote[{0, 4, 7, 12}, 1, "Piano"]]
+
+Sound[
+SoundNote[{0, 4}, 1, "Piano"]]
+
+Sound[
+SoundNote[{0, 4, 7, 12}, 1, "Piano"]]
+
+Now if we want to have two different instruments sound at the same time, or the same instrument playing two different rhythms, we have to make the timing portion of the SoundNote parameter a set as well.
+
+
+Sound[{SoundNote[{0, 12}, {0, 2}, "Piano"], 
+  SoundNote[{5, 9}, {0, 1}, "Piano"], SoundNote[{4, 7}, {1, 2}, "Piano"]}]
+Sound[{SoundNote[0, {0, 1}, "Trumpet"], SoundNote[4, {0, 1}, "Flute"]}]
+
+Sound[{
+SoundNote[{0, 12}, {0, 2}, "Piano"], 
+SoundNote[{5, 9}, {0, 1}, "Piano"], 
+SoundNote[{4, 7}, {1, 2}, "Piano"]}]
+
+Sound[{
+SoundNote[0, {0, 1}, "Trumpet"], 
+SoundNote[4, {0, 1}, "Flute"]}]
+
+
+All the examples so far have been pitched instruments.  We can also use Sound and SoundNote to imitate the sounds of non-pitched instruments.  Since they are non-pitched, they do not have a specified not to play, so non-pitched instruments will have different parameters in SoundNote.  It requires two parameters, the first one is the instrument name in a string, and the timing of the desired rhythm.
+
+
+Sound[SoundNote["Snare", {0, 1}]]
+Sound[{SoundNote["Snare", {0, .5}], SoundNote["Snare", {.5, 1}]}]
+
+Sound[
+SoundNote["Snare", {0, 1}]]
+
+Sound[{
+SoundNote["Snare", {0, 0.5}], 
+SoundNote["Snare", {0.5, 1}]}]
+
+
+
+Now we can write some music in Mathematica in an efficient and useful way.  Here are some fun, short examples.
+
+
+Sound[{SoundNote["E", {0, 1}, "Trumpet"], SoundNote["D", {1, 2}, "Trumpet"], 
+  SoundNote["C", {2, 3}, "Trumpet"], SoundNote["D", {3, 4}, "Trumpet"], 
+  SoundNote["E", {4, 5}, "Trumpet"], SoundNote["E", {5, 6}, "Trumpet"], 
+  SoundNote["E", {6, 8}, "Trumpet"], SoundNote["D", {8, 9}, "Trumpet"], 
+  SoundNote["D", {9, 10}, "Trumpet"], SoundNote["D", {10, 12}, "Trumpet"], 
+  SoundNote["E", {12, 13}, "Trumpet"], SoundNote["G", {13, 14}, "Trumpet"], 
+  SoundNote["G", {14, 16}, "Trumpet"], SoundNote["E", {16, 17}, "Trumpet"], 
+  SoundNote["D", {17, 18}, "Trumpet"], SoundNote["C", {18, 19}, "Trumpet"], 
+  SoundNote["D", {19, 20}, "Trumpet"], SoundNote["E", {20, 21}, "Trumpet"], 
+  SoundNote["E", {21, 22}, "Trumpet"], SoundNote["E", {22, 24}, "Trumpet"], 
+  SoundNote["D", {24, 25}, "Trumpet"], SoundNote["D", {25, 26}, "Trumpet"], 
+  SoundNote["E", {26, 27}, "Trumpet"], SoundNote["D", {27, 28}, "Trumpet"], 
+  SoundNote["C", {28, 30}, "Trumpet"], 
+  SoundNote[{"C", "E", "G", "C5"}, {30, 32}, "Trumpet"]}, 8]
+
+Sound[{
+SoundNote["E", {0, 1}, "Trumpet"], 
+SoundNote["D", {1, 2}, "Trumpet"], 
+SoundNote["C", {2, 3}, "Trumpet"], 
+SoundNote["D", {3, 4}, "Trumpet"], 
+SoundNote["E", {4, 5}, "Trumpet"], 
+SoundNote["E", {5, 6}, "Trumpet"], 
+SoundNote["E", {6, 8}, "Trumpet"], 
+SoundNote["D", {8, 9}, "Trumpet"], 
+SoundNote["D", {9, 10}, "Trumpet"], 
+SoundNote["D", {10, 12}, "Trumpet"], 
+SoundNote["E", {12, 13}, "Trumpet"], 
+SoundNote["G", {13, 14}, "Trumpet"], 
+SoundNote["G", {14, 16}, "Trumpet"], 
+SoundNote["E", {16, 17}, "Trumpet"], 
+SoundNote["D", {17, 18}, "Trumpet"], 
+SoundNote["C", {18, 19}, "Trumpet"], 
+SoundNote["D", {19, 20}, "Trumpet"], 
+SoundNote["E", {20, 21}, "Trumpet"], 
+SoundNote["E", {21, 22}, "Trumpet"], 
+SoundNote["E", {22, 24}, "Trumpet"], 
+SoundNote["D", {24, 25}, "Trumpet"], 
+SoundNote["D", {25, 26}, "Trumpet"], 
+SoundNote["E", {26, 27}, "Trumpet"], 
+SoundNote["D", {27, 28}, "Trumpet"], 
+SoundNote["C", {28, 30}, "Trumpet"], 
+SoundNote[{"C", "E", "G", "C5"}, {30, 32}, "Trumpet"]}, 8]
+
+Sound[{SoundNote["G3", 1   , "Trombone"], SoundNote["G3", 1, "Trombone"], 
+  SoundNote["G3", 1, "Trombone"], SoundNote["Eb3", .75, "Trombone"], 
+  SoundNote["Bb3", .25, "Trombone"], SoundNote["G3", 1, "Trombone"], 
+  SoundNote["Eb3", .75, "Trombone"], SoundNote["Bb3", .25, "Trombone"], 
+  SoundNote["G3", 2, "Trombone"], SoundNote["D", 1, "Trombone"], 
+  SoundNote["D", 1, "Trombone"], SoundNote["D", 1, "Trombone"], 
+  SoundNote["Eb", .75, "Trombone"], SoundNote["Bb3", .25, "Trombone"], 
+  SoundNote["Gb3", 1, "Trombone"], SoundNote["Eb3", .75, "Trombone"], 
+  SoundNote["Bb3", .25, "Trombone"], SoundNote["G3", 2, "Trombone"], 
+  SoundNote["G", 1, "Trombone"], SoundNote["G3", .75, "Trombone"], 
+  SoundNote["G3", .25, "Trombone"], SoundNote["G", 1, "Trombone"], 
+  SoundNote["Gb", .75, "Trombone"], SoundNote["F", .25, "Trombone"], 
+  SoundNote["E", .25, "Trombone"], SoundNote["D#", .25, "Trombone"], 
+  SoundNote["E", 1, "Trombone"], SoundNote["G#3", .5, "Trombone"], 
+  SoundNote["C#", 1, "Trombone"], SoundNote["C", .75, "Trombone"], 
+  SoundNote["B3", .25, "Trombone"], SoundNote["Bb3", .25, "Trombone"], 
+  SoundNote["A3", .25, "Trombone"], SoundNote["Bb3", 1, "Trombone"], 
+  SoundNote["Eb3", .5, "Trombone"], SoundNote["Gb3", 1, "Trombone"], 
+  SoundNote["Eb3", .75, "Trombone"], SoundNote["Gb3", .25, "Trombone"], 
+  SoundNote["Bb3", 1, "Trombone"], SoundNote["G3", .75, "Trombone"], 
+  SoundNote["Bb3", .25, "Trombone"], SoundNote["D", 2, "Trombone"]}, 19]
+
+Sound[{
+SoundNote["G3", 1, "Trombone"], 
+SoundNote["G3", 1, "Trombone"], 
+SoundNote["G3", 1, "Trombone"], 
+SoundNote["Eb3", 0.75, "Trombone"], 
+SoundNote["Bb3", 0.25, "Trombone"], 
+SoundNote["G3", 1, "Trombone"], 
+SoundNote["Eb3", 0.75, "Trombone"], 
+SoundNote["Bb3", 0.25, "Trombone"], 
+SoundNote["G3", 2, "Trombone"], 
+SoundNote["D", 1, "Trombone"], 
+SoundNote["D", 1, "Trombone"], 
+SoundNote["D", 1, "Trombone"], 
+SoundNote["Eb", 0.75, "Trombone"], 
+SoundNote["Bb3", 0.25, "Trombone"], 
+SoundNote["Gb3", 1, "Trombone"], 
+SoundNote["Eb3", 0.75, "Trombone"], 
+SoundNote["Bb3", 0.25, "Trombone"], 
+SoundNote["G3", 2, "Trombone"], 
+SoundNote["G", 1, "Trombone"], 
+SoundNote["G3", 0.75, "Trombone"], 
+SoundNote["G3", 0.25, "Trombone"], 
+SoundNote["G", 1, "Trombone"], 
+SoundNote["Gb", 0.75, "Trombone"], 
+SoundNote["F", 0.25, "Trombone"], 
+SoundNote["E", 0.25, "Trombone"], 
+SoundNote["D#", 0.25, "Trombone"], 
+SoundNote["E", 1, "Trombone"], 
+SoundNote["G#3", 0.5, "Trombone"], 
+SoundNote["C#", 1, "Trombone"], 
+SoundNote["C", 0.75, "Trombone"], 
+SoundNote["B3", 0.25, "Trombone"], 
+SoundNote["Bb3", 0.25, "Trombone"], 
+SoundNote["A3", 0.25, "Trombone"], 
+SoundNote["Bb3", 1, "Trombone"], 
+SoundNote["Eb3", 0.5, "Trombone"], 
+SoundNote["Gb3", 1, "Trombone"], 
+SoundNote["Eb3", 0.75, "Trombone"], 
+SoundNote["Gb3", 0.25, "Trombone"], 
+SoundNote["Bb3", 1, "Trombone"], 
+SoundNote["G3", 0.75, "Trombone"], 
+SoundNote["Bb3", 0.25, "Trombone"], 
+SoundNote["D", 2, "Trombone"]}, 19]
+
+
+
+
+There is one potential problem with writing music in Mathematica, if there is one small mistake in a large amount of code, it will not compile properly and will not produce any sound.  When it does this, there is no easy way of finding the mistake in the code, so you would need to read every single line to find the mistake.  Look at the following example.
+
+
+Sound[{SoundNote["E", {0, 1}, "Trumpet"], SoundNote["D", {1, 2}, "Trumpet"], 
+  SoundNote["C", {2, 3}, "Trumpet"], SoundNote["D", {3, 4}, "Trumpet"], 
+  SoundNote["E", {4, 5}, "Trumpet"], SoundNote["E", {5, 6}, "Trumpet"], 
+  SoundNote["E", {6, 8}, "Trumpet"], SoundNote["D" , {8, 9}, "Trumpet"], 
+  SoundNote["D", {9, 10}, "Trumpet"], SoundNote["D ", {10, 12}, "Trumpet"], 
+  SoundNote["E", {12, 13}, "Trumpet"], SoundNote["G", {13, 14}, "Trumpet"], 
+  SoundNote["G", {14, 16}, "Trumpet"], SoundNote["E", {16, 17}, "Trumpet"], 
+  SoundNote["D", {17, 18}, "Trumpet"], SoundNote["C", {18, 19}, "Trumpet"], 
+  SoundNote["D", {19, 20}, "Trumpet"], SoundNote["E", {20, 21}, "Trumpet"], 
+  SoundNote["E", {21, 22}, "Trumpet"], SoundNote["E", {22, 24}, "Trumpet"], 
+  SoundNote["D", {24, 25}, "Trumpet"], SoundNote["D", {25, 26}, "Trumpet"], 
+  SoundNote["E", {26, 27}, "Trumpet"], SoundNote["D", {27, 28}, "Trumpet"], 
+  SoundNote["C", {28, 30}, "Trumpet"], 
+  SoundNote[{"C", "E", "G", "C5"}, {30, 32}, "Trumpet"]}, 8]
+
+Sound[{SoundNote["E", {0, 1}, "Trumpet"], SoundNote["D", {1, 2}, "Trumpet"], 
+  SoundNote["C", {2, 3}, "Trumpet"], SoundNote["D", {3, 4}, "Trumpet"], 
+  SoundNote["E", {4, 5}, "Trumpet"], SoundNote["E", {5, 6}, "Trumpet"], 
+  SoundNote["E", {6, 8}, "Trumpet"], SoundNote["D", {8, 9}, "Trumpet"], 
+  SoundNote["D", {9, 10}, "Trumpet"], SoundNote["D ", {10, 12}, "Trumpet"], 
+  SoundNote["E", {12, 13}, "Trumpet"], SoundNote["G", {13, 14}, "Trumpet"], 
+  SoundNote["G", {14, 16}, "Trumpet"], SoundNote["E", {16, 17}, "Trumpet"], 
+  SoundNote["D", {17, 18}, "Trumpet"], SoundNote["C", {18, 19}, "Trumpet"], 
+  SoundNote["D", {19, 20}, "Trumpet"], SoundNote["E", {20, 21}, "Trumpet"], 
+  SoundNote["E", {21, 22}, "Trumpet"], SoundNote["E", {22, 24}, "Trumpet"], 
+  SoundNote["D", {24, 25}, "Trumpet"], SoundNote["D", {25, 26}, "Trumpet"], 
+  SoundNote["E", {26, 27}, "Trumpet"], SoundNote["D", {27, 28}, "Trumpet"], 
+  SoundNote["C", {28, 30}, "Trumpet"], 
+  SoundNote[{"C", "E", "G", "C5"}, {30, 32}, "Trumpet"]}, 8]
+
+In order to check for correctness, you would have to sift through all the lines to make sure that, the first entry is a valid note, the second entry is, in this case, a list of two integers, and make sure the last part is a valid instrument.  Even then, it might not be obvious why it isn't compiling, just like this case.  There is a space in the highlighted Note string, therefore he whole thing won't compile.
+
+
+Sound[{SoundNote["E", {0, 1}, "Trumpet"], SoundNote["D", {1, 2}, "Trumpet"], 
+  SoundNote["C", {2, 3}, "Trumpet"], SoundNote["D", {3, 4}, "Trumpet"], 
+  SoundNote["E", {4, 5}, "Trumpet"], SoundNote["E", {5, 6}, "Trumpet"], 
+  SoundNote["E", {6, 8}, "Trumpet"], SoundNote["D" , {8, 9}, "Trumpet"], 
+  SoundNote["D", {9, 10}, "Trumpet"], SoundNote["D ", {10, 12}, "Trumpet"], 
+  SoundNote["E", {12, 13}, "Trumpet"], SoundNote["G", {13, 14}, "Trumpet"], 
+  SoundNote["G", {14, 16}, "Trumpet"], SoundNote["E", {16, 17}, "Trumpet"], 
+  SoundNote["D", {17, 18}, "Trumpet"], SoundNote["C", {18, 19}, "Trumpet"], 
+  SoundNote["D", {19, 20}, "Trumpet"], SoundNote["E", {20, 21}, "Trumpet"], 
+  SoundNote["E", {21, 22}, "Trumpet"], SoundNote["E", {22, 24}, "Trumpet"], 
+  SoundNote["D", {24, 25}, "Trumpet"], SoundNote["D", {25, 26}, "Trumpet"], 
+  SoundNote["E", {26, 27}, "Trumpet"], SoundNote["D", {27, 28}, "Trumpet"], 
+  SoundNote["C", {28, 30}, "Trumpet"], 
+  SoundNote[{"C", "E", "G", "C5"}, {30, 32}, "Trumpet"]},
+
+Now knowing this, here's my attempt at creating a way to check your music code for any mistakes.  Each program will interpret SoundNote functions with 3 parameters as Pitched instruments and SoundNote functions with 2 parameters Non-pitched Instruments.
+
+
+
+The following are lists, the first list contains valid strings of notes and their corresponding numbers, the second list contains valid strings of instruments and their corresponding numbers, and lastly the third list contains all the valid percussion instruments.
+
+There are comments in the list to indicate that the following notes are in a specific octave.
+
+Notes = {(*0*){"C0", -48}, {"C#0", -47}, {"Db0", -47}, {"D0", -46}, {"D#0", \
+-45}, {"Eb0", -45}, {"E0", -44}, {"F0", -43}, {"F#0", -42}, {"Gb0", -42}, \
+{"G0", -41}, {"G#0", -40}, {"Ab0", -40}, {"A0", -39}, {"A#0", -38}, {"Bb0", \
+-38}, {"B0", -37},(*1*){"C1", -36}, {"C#1", -35}, {"Db1", -35}, {"D1", -34}, \
+{"D#1", -33}, {"Eb1", -33}, {"E1", -32}, {"F1", -31}, {"F#1", -30}, {"Gb1", \
+-30}, {"G1", -29}, {"G#1", -28}, {"Ab1", -28}, {"A1", -27}, {"A#1", -26}, \
+{"Bb1", -26}, {"B1", -25},(*2*){"C2", -24}, {"C#2", -23}, {"Db2", -23}, \
+{"D2", -22}, {"D#2", -21}, {"Eb2", -21}, {"E2", -20}, {"F2", -19}, {"F#2", \
+-18}, {"Gb2", -18}, {"G2", -17}, {"G#2", -16}, {"Ab2", -16}, {"A2", -15}, \
+{"A#2", -14}, {"Bb2", -14}, {"B2", -13},(*3*){"C3", -12}, {"C#3", -11}, \
+{"Db3", -11}, {"D3", -10}, {"D#3", -9}, {"Eb3", -9}, {"E3", -8}, {"F3", -7}, \
+{"F#3", -6}, {"Gb3", -6}, {"G3", -5}, {"G#3", -4}, {"Ab3", -4}, {"A3", -3}, \
+{"A#3", -2}, {"Bb3", -2}, {"B3", -1},(*4/
+   Nothing*){"C4", 0}, {"C#4", 1}, {"Db4", 1}, {"D4", 2}, {"D#4", 3}, {"Eb4", 
+    3}, {"E4", 4}, {"F4", 5}, {"F#4", 6}, {"Gb4", 6}, {"G4", 7}, {"G#4", 
+    8}, {"Ab4", 8}, {"A4", 9}, {"A#4", 10}, {"Bb4", 10}, {"B4", 11},(**){"C", 
+    0}, {"C#", 1}, {"Db", 1}, {"D", 2}, {"D#", 3}, {"Eb", 3}, {"E", 4}, {"F", 
+    5}, {"F#", 6}, {"Gb", 6}, {"G", 7}, {"G#", 8}, {"Ab", 8}, {"A", 9}, {"A#",
+     10}, {"Bb", 10}, {"B", 11},(*5*){"C5", 12}, {"C#5", 13}, {"Db5", 
+    13}, {"D5", 14}, {"D#5", 15}, {"Eb5", 15}, {"E5", 16}, {"F5", 17}, {"F#5",
+     18}, {"Gb5", 18}, {"G5", 19}, {"G#5", 20}, {"Ab5", 20}, {"A5", 
+    21}, {"A#5", 22}, {"Bb5", 22}, {"B5", 23},(*6*){"C6", 24}, {"C#6", 
+    25}, {"Db6", 25}, {"D6", 26}, {"D#6", 27}, {"Eb6", 27}, {"E6", 28}, {"F6",
+     29}, {"F#6", 30}, {"Gb6", 30}, {"G6", 31}, {"G#6", 32}, {"Ab6", 
+    32}, {"A6", 33}, {"A#6", 34}, {"Bb6", 34}, {"B6", 35},(*7*){"C7", 
+    36}, {"C#7", 37}, {"Db7", 37}, {"D7", 38}, {"D#7", 39}, {"Eb7", 
+    39}, {"E7", 40}, {"F7", 41}, {"F#7", 42}, {"Gb7", 42}, {"G7", 43}, {"G#7",
+     44}, {"Ab7", 44}, {"A7", 45}, {"A#7", 46}, {"Bb7", 46}, {"B7", 
+    47},(*8*){"C8", 48}, {"C#8", 49}, {"Db8", 49}, {"D8", 50}, {"D#8", 
+    51}, {"Eb8", 51}, {"E8", 52}, {"F8", 53}, {"F#8", 54}, {"Gb8", 54}, {"G8",
+     55}, {"G#8", 56}, {"Ab8", 56}, {"A8", 57}, {"A#8", 58}, {"Bb8", 
+    58}, {"B8", 59},(*9*){"C9", 60}};
+
+Instruments = {{1, "Piano"}, {2, "BrightPiano"}, {3, 
+    "ElectricGrandPiano"}, {4, "HonkyTonkPiano"}, {5, "ElectricPiano"}, {6, 
+    "ElectricPiano2"}, {7, "Harpsichord"}, {8, "Clavi"}, {9, "Celesta"}, {10, 
+    "Glockenspiel"}, {11, "MusicBox"}, {12, "Vibraphone"}, {13, 
+    "Marimba"}, {14, "Xylophone"}, {15, "TubularBells"}, {16, 
+    "Dulcimer"}, {17, "DrawbarOrgan"}, {18, "PercussiveOrgan"}, {19, 
+    "RockOrgan"}, {20, "Organ"}, {21, "ReedOrgan"}, {22, "Accordion"}, {23, 
+    "Harmonica"}, {25, "Guitar"}, {26, "SteelGuitar"}, {27, 
+    "JazzGuitar"}, {29, "GuitarMuted"}, {30, "GuitarOverdriven"}, {31, 
+    "GuitarDistorted"}, {32, "GuitarHarmonics"}, {33, "Bass"}, {34, 
+    "ElectricBass"}, {35, "PickedBass"}, {36, "FretlessBass"}, {37, 
+    "SlapBass"}, {38, "SlapBass2"}, {39, "SynthBass"}, {40, 
+    "SynthBass2"}, {41, "Violin"}, {42, "Viola"}, {43, "Cello"}, {44, 
+    "Contrabass"}, {45, "TremoloStrings"}, {46, "PizzicatoStrings"}, {47, 
+    "Harp"}, {48, "Timpani"}, {49, "Strings"}, {50, "Strings2"}, {51, 
+    "SynthStrings"}, {52, "SynthStrings2"}, {53, "VoiceAahs"}, {54, 
+    "VoiceOohs"}, {56, "OrchestraHit"}, {57, "Trumpet"}, {58, 
+    "Trombone"}, {59, "Tuba"}, {60, "MutedTrumpet"}, {61, "FrenchHorn"}, {62, 
+    "BrassSection"}, {63, "SynthBrass"}, {64, "SynthBrass2"}, {65, 
+    "SopranoSax"}, {66, "AltoSax"}, {67, "TenorSax"}, {68, 
+    "BaritoneSax"}, {69, "Oboe"}, {70, "EnglishHorn"}, {71, "Bassoon"}, {72, 
+    "Clarinet"}, {73, "Piccolo"}, {74, "Flute"}, {75, "Recorder"}, {76, 
+    "PanFlute"}, {77, "BlownBottle"}, {78, "Shakuhachi"}, {79, 
+    "Whistle"}, {80 , "Ocarina"}, {105, "Sitar"}, {106, "Banjo"}, {107, 
+    "Shamisen"}, {108, "Koto"}, {109, "Kalimba"}, {110, "Bagpipe"}, {111, 
+    "Fiddle"}, {112, "Shanai"}, {113, "TinkleBell"}, {114, "Agogo"}, {115, 
+    "SteelDrums"}, {116, "Woodblock"}, {117, "Taiko"}, {118, 
+    " MelodicTom"}, {119 , "SynthDrum"}, {120, "ReverseCymbal"}, {122 , 
+    "Breath"}, {123 , "Seashore"}, {124 , "Bird"}, {125 , "Telephone"}, {126 ,
+     "Helicopter"}, {127 , "Applause"}, {128 , "Gunshot"}};
+
+Percussion = {"BassDrum" , "BassDrum2", "BellTree", "Cabasa",
+   "Castanets" , "ChineseCymbal", "Clap", "Claves",
+   "Cowbell", "CrashCymbal", "CrashCymbal2", "ElectricSnare",
+   "GuiroLong", "GuiroShort", "HighAgogo", "HighBongo",
+   "HighCongaMute", "HighCongaOpen", "HighFloorTom", "HighTimbale",
+   "HighTom", "HighWoodblock", "HiHatClosed", "HiHatOpen",
+   "HiHatPedal", "JingleBell", "LowAgogo", "LowBongo",
+   "LowConga", "LowFloorTom", "LowTimbale", "LowTom",
+   "LowWoodblock", "Maracas", "MetronomeBell", "MetronomeClick",
+   "MidTom", "MidTom2", "MuteCuica", "MuteSurdo",
+   "MuteTriangle", "OpenCuica", "OpenSurdo", "OpenTriangle",
+   "RideBell", "RideCymbal", "RideCymbal2", "ScratchPull",
+   "ScratchPush", "Shaker", "SideStick", "Slap",
+   "Snare", "SplashCymbal", "SquareClick", "Sticks",
+   "Tambourine", "Vibraslap", "WhistleLong", "WhistleShort"};
+
+The first part of my solution involves a conversion program.  Since the first entry of each SoundNote function can be written as a string or a number, I will have this program convert all the strings to numbers to make the list easier to work with.  
+
+It is also very important to point out that t only the pitched instruments will need to be converted.  Non-pitched instruments, like the snare drum or triangle, do not have a designated pitch so they do not need to be converted.
+
+I will only have a list of SoundNote functions be inputted into any given list.  At the end of the penultimate module, it will create the music by putting the lists into the built-in Sound function.
+
+ConvertMusicNotes[NoteList_] :=
+  Module[{debug = True, check, a, b, c, d, e, NewList},
+   
+   (*first things first, 
+   you need to insert a list of SoundNote functions into this program*)
+   If[ListQ[NoteList] == False,
+    Print["Error found in Convert Music Notes program"];
+    Return["Please input a list of SoundNote functions"];
+    ];
+   
+   (*do not want to work with an empty list*)
+   If[Length[NoteList] == 0,
+    Print["Error found in Convert Music Notes program"];
+    Return["Please do not enter an empty list"];
+    ];(*end if*)
+   
+   (**)
+   For[e = 1, e <= Length[NoteList], e++,
+    
+    (*Since this program only converts pitched instruments, 
+    each SoundNote must have 3 parameters*)
+    (*If it does not have three, 
+    then this conversion cannot be made and there will be an error statement*)
+
+    
+    If[Length[NoteList[[e]]] != 3, 
+      Print[
+       "You can only input a list of pitched instruments into this module"];
+      Print["Error found in Convert Music Notes program"];
+      Return[
+       "The length of each sublist must be 3 in order for it to represent a \
+pitched instrument"];
+      ];(*end length 3 if statement*)
+    
+    ];(*end e for loop*)
+   
+   NewList = {};
+   (*cycle through the whole list*)
+   For[a = 1, a <= Length[NoteList], a++,
+    
+    (*Making a new list because adjustments may have to be made*)
+    NewList = Append[NewList, NoteList[[a]]];
+    check = NewList[[a, 1]];
+    
+    (**************************)
+    If[debug == False,
+     Print["This is what was added to the list"];
+     Print[NewList[[a]]];
+     Print["This is going to be checked to see if its a list or not"];
+     Print[check];
+     ];(*end debug*)
+    (**************************)
+    
+    (*Since the first entry of SoundNote can either be a list or a single \
+item*)
+    (*this program will need to check to see whether it is a list or not*)
+    If[ListQ[check] == True,
+     
+     (*************************)
+     If[debug == False,
+      Print[
+       "The first part of the object being worked on is a list. This is the \
+list"];
+      Print[NewList[[a, 1]]];
+      ];(*end debug*)
+     (*************************)
+     
+     (*if it is a list, 
+     it will need to cycle through every element of the list*)
+     (*to see whether to item is a string or not*)
+     For[b = 1, b <= Length[check], b++,
+      
+      If[StringQ[check[[b]]] == True,
+        
+        (*Since the element is a string, 
+        it will cycle through the "Notes" list*)
+        (*And find its matching string in the list*)
+        For[c = 1, c <= Length[Notes], c++,
+          
+          If[NewList[[a, 1, b]] == Notes[[c, 1]],
+            (*Once it finds its matching string, 
+            it replaces the string with its*)
+            (*Corresponding integer value*)
+            NewList[[a, 1, b]] = Notes[[c, 2]];
+            
+            If[debug == False,
+             
+             Print["A part of the list has been changed from a string to a \
+number"];
+             Print[NewList[[a, 1]]];
+             ];(*end debug*)
+            
+            
+            (*Note: 
+            if the string does not exist it will not replace the string with \
+anything*)
+            (*This is alright, because in the final program, 
+            it will cycle through all the*)
+            (*elements of the list again, 
+            this time only checking to see if it is an*)
+            (*integer, if it is not, there is an error message*)
+            
+            
+            ];(*end change letters to number if statement*)
+          ];(*end c for loop*)
+        ];(*end stringq if*)
+      ];(*end b for loop*)
+     ];(*end ListQ if*)
+    
+    
+    (*This is the scenario in the case that the first entry is not a list*)
+    If[ListQ[check] == False,
+     
+     (*If it is a string, 
+     it will do the same process as before and find its matching*)
+     (*string, then it replaces the string with the integer assigned to it*)
+     If[StringQ[check] == True,
+       
+       (*cycles through "Notes" list*)
+       For[d = 1, d <= Length[Notes], d++,
+         
+         If[check ==  Notes[[d, 1]],
+           
+           NewList[[a, 1]] = Notes[[d, 2]];
+           
+           If[debug == False,
+            
+            Print["A part of the list has been changed from a string to a \
+number"];
+            Print[NewList[[a, 1]]];
+            
+            ];(*end debug*)
+           ];(*end notes if statement*)
+         ];(*end d for loop*)
+       ];(*end if stringq is false statement*)
+     ];(*end if listq is false statement *)
+    ];(*end a for loop*)
+   
+   Return[NewList];
+   ];(*end module*)
+
+The following portion will be dedicated to tested the Module above.
+
+
+ConvertMusicNotes[1]
+
+Error found in Convert Music Notes program
+
+"Please input a list of SoundNote functions"
+
+ConvertMusicNotes[{1}]
+
+You can only input a list of pitched instruments into this module
+
+Error found in Convert Music Notes program
+
+"The length of each sublist must be 3 in order for it to represent a pitched \
+instrument"
+
+ConvertMusicNotes[{SoundNote["G4", {0, 1}, "Trumpet"]}]
+
+{SoundNote[7, {0, 1}, "Trumpet"]}
+
+ConvertMusicNotes[{SoundNote["Snare", {0, 1}]}]
+
+You can only input a list of pitched instruments into this module
+
+Error found in Convert Music Notes program
+
+"The length of each sublist must be 3 in order for it to represent a pitched \
+instrument"
+
+ConvertMusicNotes[{SoundNote[7, {0, 1}, "Trumpet"]}]
+
+{SoundNote[7, {0, 1}, "Trumpet"]}
+
+ConvertMusicNotes[{SoundNote["G4 ", {0, 1}, 
+   "Trumpet"]}](*the program did nothing, but the error will be detected in a \
+separate module*)
+
+{SoundNote["G4 ", {0, 1}, "Trumpet"]}
+
+
+Now that we have created a module that converts all the Music note strings to integers, we must do the same with the instruments.  All pitched instruments have an assigned integer value, so we can do a very similar method the ConvertMusicNotes uses.
+
+However, since Non-pitched instruments do not have corresponding integer values built-in, this program will simply check to make sure the string, in each SoundNote file, is a valid instrument according to the Percussion list above.
+
+ConvertInstruments[InstrumentList_] :=
+  Module[{debug = True, NewList, check, a, b, c, d, counter},
+   
+   (*human error stops*)
+   (*we need to make sure that a list is being input*)
+   If[ListQ[InstrumentList] == False,
+    Print["Error found in converting instruments program"];
+    Return["Please input a list of Pitched or Unpitched Instruments"];
+    ];(*end if statement*)
+   
+   If[Length[InstrumentList] == 0,
+    Print["Error found in converting instruments program"];
+    Return["Please do no enter an empty list"];
+    ];(*end if*)
+   
+   (*The inputted list needs to be either length 2, to represent Non-
+   pitched isntruments*)
+   (*Or length 3, to represent pitched instruments*)
+   If[Length[InstrumentList[[1]]] < 2,
+    Print["Error found in converting instruments program"];
+    Return["The length of each part of the list must be greater than 1."];
+    ];(*end if*)
+   
+   If[Length[InstrumentList[[1]]] > 3,
+    Print["Error found in converting instruments program"];
+    Return["The length of each part of the list must be less than 4"];
+    ];(*end if*)
+   
+   (*We want to make sure that the list consists of only pitched instruments, 
+   or of only non-pitched instruments*)
+   For[a = 1, a <= Length[InstrumentList], a++,
+    
+    If[Length[InstrumentList[[1]]] != Length[InstrumentList[[a]]],
+      Print["Please input a list with each element the same size."];
+      Print["Error found in converting instruments program"];
+      Return[
+       "Make sure the list consists of pitched or unpitched instruments, not \
+both."];
+      ];(*end if statement*)
+    ];(*end for loop*)
+   (*end of human error trapping*)
+   (************************************************************)
+   
+   (*Now we will start to cycle through each element of the list to check to \
+see*)
+   (*if the instrument is represented as a string or a number*)
+   NewList = {};
+   
+   For[b = 1, b <= Length[InstrumentList], b++,
+    
+    If[debug == False,
+     Print["This is the part of the list being worked on"];
+     Print[InstrumentList[[b]]];
+     ];(*end debu*)
+    
+    
+    (*create a new list incase changes need to be made*)
+    NewList = Append[NewList, InstrumentList[[b]]];
+    
+    (*We will split this portion of the program into two groups, 
+    pitched instruments*)
+    (*and non-pitched instruments.  
+    Since they both have different parameters, the*)
+    (*location for the specified instrument is different*)
+    
+    (*This starts the case where the list is of pitched instruments*)
+    If[Length[NewList[[1]]] == 3,
+     
+     (*checks to see if the instrument is represented as a string*)
+     If[StringQ[NewList[[b, 3]]] == True,
+       
+       (*if it is a string, it cycles through the "Instruments" list above*)
+       (*to find a matching string*)
+       (*once a match has been made, 
+       it replaces the string with its corresponding int*)
+       For[c = 1, c <= Length[Instruments], c++,
+         
+         If[NewList[[b, 3]] == Instruments[[c, 2]],
+           
+           NewList[[b, 3]] = Instruments[[c, 1]];
+           
+           ];(*end if*)
+         ];(*end c for loop*)
+       ];(*end stringq*)
+     ];(*end length 3 if*)
+    
+    
+    (*Begin the non-pitched instrument check*)
+    (*Since non-pitched instruments can't be represented with a number, 
+    this will just*)
+    (*check the string to make sure it is a percussion instrument*)
+    If[Length[NewList[[1]]] == 2,
+     
+     (*executes an error if not a string*)
+     If[StringQ[NewList[[b, 1]]] == False,
+      Print["Non-pitched instruments can only be represented as a string"];
+      Print["Error found in converting instruments program"];
+      Print["This is where the program stopped due to an invalid instrument"];
+      Return[InstrumentList[[b]]];
+      ];
+     
+     If[StringQ[NewList[[b, 1]]] == True,
+      
+      (*Since it only checks to see if the string matches another string on \
+the*)
+      (*Percussion list, 
+      I will need to create an error message for when the *)
+      (*string doesn't have a match*)
+      counter = 0;
+      
+      For[d = 1, d <= Length[Percussion], d++,
+       
+       If[debug == False,
+        Print[
+         "The program is now cycling Percussion instruments, this is what it \
+is on"];
+        Print[Percussion[[d]]];
+        ];(*end debug*)
+       
+       If[NewList[[b, 1]] == Percussion[[d]],
+        
+        If[debug == False,
+         Print[
+          "The percussion instrument found a match on the Percussion list"];
+         Print["counter now equals 1"];
+         ];(*end debug*)
+        
+        (*if there is a string, the counter will change to 1*)
+        counter = 1;
+        
+        ];(*end inner if*)
+       ];(*end d for loop*)
+      
+      (*once outside the Percussion list for loop, 
+      if a match hasn't been made*)
+      (*then the counter will still be 0*)
+      If[counter == 0,
+       Print["Invalid Percussion instrument"];
+       Print["Error found in converting instruments program"];
+       Print["This is where the program stopped due to an invalid instrument"];
+       Return[InstrumentList[[b]]];
+       ];(*end if*)
+      
+      
+      ];(*end stringq*)
+     ];(*if length = 2 *)
+    ];(*end b for loop*)
+   
+   (*returns an updated list*)
+   Return[NewList];
+   ];(*end module*)
+
+
+The following portion will be dedicated to testing the above Module.
+
+
+ConvertInstruments[1]
+
+Error found in converting instruments program
+
+"Please input a list of Pitched or Unpitched Instruments"
+
+ConvertInstruments[{}]
+
+Error found in converting instruments program
+
+"Please do no enter an empty list"
+
+ConvertInstruments[{SoundNote["G4"]}]
+
+Error found in converting instruments program
+
+"The length of each part of the list must be greater than 1."
+
+ConvertInstruments[{SoundNote["G4", {0, 1}, "Trumpet"]}]
+
+{SoundNote["G4", {0, 1}, 57]}
+
+ConvertInstruments[{SoundNote["G4", {0, 1}, "Trumpet", "Yes"]}]
+
+Error found in converting instruments program
+
+"The length of each part of the list must be less than 4"
+
+ConvertInstruments[{SoundNote["G4", {0, 1}, "Trumpet"], 
+  SoundNote["Snare", {0, 1}]}]
+
+Please input a list with each element the same size.
+
+Error found in converting instruments program
+
+"Make sure the list consists of pitched or unpitched instruments, not both."
+
+ConvertInstruments[{SoundNote[1, {0, 1}]}]
+
+Non-pitched instruments can only be represented as a string
+
+Error found in converting instruments program
+
+This is where the program stopped due to an invalid instrument
+
+SoundNote[1, {0, 1}]
+
+ConvertInstruments[{SoundNote["Snar", {0, 1}]}]
+
+Invalid Percussion instrument
+
+Error found in converting instruments program
+
+This is where the program stopped due to an invalid instrument
+
+SoundNote["Snar", {0, 1}]
+
+ConvertInstruments[{SoundNote["Snare", {0, 1}]}]
+
+{SoundNote["Snare", {0, 1}]}
+
+
+
+
+Now that I have created two conversion programs, it will be easier to check to see if there are any errors in the coded music.  After it has checked to make sure there are no errors in the code, it will produce music by inputting the lists into the built-in Sound function.  There is also an added parameter, besides the instrument sets, and it is a positive integer.  This allows the person to enter in a speed, or tempo, that they want their piece to be played at.
+
+Music[Pitched_, NotPitched_, BPM_] :=
+  Module[{Beats, Tempo, NoteList, a, b, c, d, e, debug = False, NewPList, 
+    NewNotPList},
+   NoteList = {};
+   
+   (*makes sure a list is put in for the first parameter*)
+   If[ListQ[Pitched] == False,
+    Return["Please input a list into the first parameter"];
+    ];
+   
+    (*makes sure a list is put in for the second parameter*)
+   If[ListQ[NotPitched] == False,
+    Return["Please input a list into the second parameter"];
+    ];
+   
+   (*Check to make sure that BPM is an integer*)
+   If[IntegerQ[BPM] == False,
+    Return["Please input an integer for the desired tempo"];
+    ];(*end integer BPM if *)
+   
+   (*check to make sure BPM is positive*)
+   If[BPM <= 0,
+    Return["Please input a positive integer for the desired tempo."];
+    ];
+   
+   (*This portion uses the previous to conversion methods we previously made*)
+\
+
+   (*to convert the whole list into numbers (with the exception of the non-
+   pitched)*)
+   NewPList = ConvertMusicNotes[Pitched];
+   NewPList = ConvertInstruments[NewPList];
+   
+   (*there are no pitches in the non-pitched instruments list, 
+   so we don't call the*)
+   (*ConvertMusuciNotes module*)
+   NewNotPList = ConvertInstruments[NotPitched];
+   
+   If[debug == True,
+    Print["This is the inputted Pitched list that has been converted to all \
+numbers."];
+    Print[NewPList];
+    Print["This is the inputted NotPitched list.  It has been checked to make \
+sure that all the instruments are spelled correctly."];
+    Print[NewNotPList];
+    ];(*end debug*)
+   
+   
+   (*sees if the user accidentally put the lists in the opposite place*)
+   If[Length[NewPList[[1]]] == 2,
+    If[Length[NewNotPList[[1]]] == 3,
+      Return[
+        "Double check to make sure that the Pitched instrument list is the \
+first input and the unpitched instrument list is the second input"];
+      ];(*end inner if*)
+    ];(*end outer if*)
+   
+   
+   (*********************************************************************)
+   (*this is the start of the pitched instrument portion of the module*)
+   (*check each element of the list to make sure they all fit the \
+requirements*)
+   (*********************************************************************)
+   For[a = 1, a <= Length[NewPList], a++,
+    
+    If[debug == True,
+     Print["This is the current element in the list we are checking"];
+     Print[NewPList[[a]]];
+     ];(*end debug*)
+    
+    (*we don't have to check to see if its length 3 because the other module \
+already does that*)
+    
+    (*the following if statements will make sure that, 
+    if the first element in*)
+    (*this part of a set is only a number, it checks to make sure it *)
+    (*is an integer between -48 and 60*)
+    If[ListQ[NewPList[[a, 1]]] == False,
+     
+     (*check to make sure its an integer*)
+     If[IntegerQ[NewPList[[a, 1]]] == False,
+      Print[
+       "Please make sure you input a numerical value in for the first part of \
+each soundnote line"];
+      Print["This is the line the program stopped on"];
+      Return[NewPList[[a]]];
+      ];(*end inner if*)
+     
+     (*makes sure its -48 or bigger*)
+     If[NewPList[[a, 1]] < -48,
+      Print["You cannot have a note value lower than -48"];
+      Print["This is the line the program stopped on"];
+      Return[NewPList[[a]]];
+      ];(*end inner if*)
+     
+     (*makes sure the int is not bigger than 60*)
+     If[NewPList[[a, 1]] > 60,
+      Print["You cannot have a note value higher than 60"];
+      Print["This is the line the program stopped on"];
+      Return[NewPList[[a]]];
+      ];(*end inner if*)
+     ];(*end outer if*)
+    
+    (*The following if statements will make sure that, 
+    if the first element in*)
+    (*this part of the list is another list, then each member of that list*)
+    (*is an integer between -60 and 60*)
+    
+    (*checks to see if the first part of SoundNote for pitched instruments is \
+a list*)
+    If[ListQ[NewPList[[a, 1]]] == True,
+     
+     For[d = 1, d <= Length[NewPList[[a, 1]]], d++,
+       
+       (*since it is a list, it will now cycle through that whole list*)
+       (*to make sure each part of it is an integer*)
+       
+       If[debug == True,
+        Print["This is the part being looked into"];
+        Print[NewPList[[a, 1, d]]];
+        ];(*end debug*)
+       
+       (*checks to see if element in list is an integer*)
+       If[IntegerQ[NewPList[[a, 1, d]]] == False,
+        Print[
+         "Please make sure every number in the first list of the following \
+code is an integer"];
+        Print["This is the line the program stopped on"];
+        Return[NewPList[[a]]];
+        ];(*end inner if*)
+       
+       (*checks to make sure its not smaller than -48*)
+       If[NewPList[[a, 1, d]] < -48,
+        Print["You cannot have a note value lower than -48"];
+        Print["This is the line the program stopped on"];
+        Return[NewPList[[a]]];
+        ];(*end inner if*)
+       
+       (*makes sure its not bigger than 60*)
+       If[NewPList[[a, 1, d]] > 60,
+        Print["You cannot have a note value higher than 60"];
+        Print["This is the line the program stopped on"];
+        Return[NewPList[[a]]];
+        ];(*end inner if*)
+       ];(*end for loop*)
+     ];(*end outer if*)
+    
+    (************************************************************************)
+\
+
+    
+    (*the following if statement will make sure that the second part in each \
+SoundNote*)
+    (*is a set with two numbers in it, that are listed from low to high*)
+    
+    (*makes sure its a list*)
+    If[ListQ[NewPList[[a, 2]]] == False,
+     Print[
+      "Make sure the note lengths are represented using a list of two \
+numbers."];
+     Print["This is the line the program stopped on"];
+     Return[NewPList[[a]]];
+     ];(*end if*)
+    
+    (*checks to see it is length 2*)
+    If[Length[NewPList[[a, 2]]] != 2,
+     Print[
+      "Make sure each note length is represented as a list of two numbers"];
+     Print["This is the line the program stopped on"];
+     Return[NewPList[[a]]];
+     ];(*end if*)
+    
+    (*it is now a list with length 2, 
+    so now we need to check to see that both items*)
+    (*are numbers*)
+    If[NumberQ[NewPList[[a, 2, 1]]] == False,
+     Print[
+      "Make sure each note length is represented as a list of two numbers"];
+     Print["This is the line the program stopped on"];
+     Return[NewPList[[a]]];
+     ];(*end if*)
+    
+    If[NumberQ[NewPList[[a, 2, 2]]] == False,
+     Print[
+      "Make sure each note length is represented as a list of two numbers"];
+     Print["This is the line the program stopped on"];
+     Return[NewPList[[a]]];
+     ];(*end if*)
+    
+    (*both numbers need to be positive*)
+    (*only need to check to see if the first number is greater than or equal \
+to 0*)
+    (*because the second number needs to be bigger than it*)
+    If[NewPList[[a, 2, 1]] < 0,
+     Print[
+      "The list representing note lengths cannot contain a negative number."];
+     Print["This is the line the program stopped on"];
+     Return[NewPList[[a]]];
+     ];(*end if*)
+    
+    (*checks to make sure the second number is larger than the first*)
+    If[NewPList[[a, 2, 1]] > NewPList[[a, 2, 2]],
+     Print[
+      "Please input the two numbers that are representing the note length \
+from lest to greatest"];
+     Print["This is the line the program stopped on"];
+     Return[NewPList[[a]]];
+     ];(*end if*)
+    (****************************************************************************)
+\
+
+    (*The following if statements will check to see if the 3rd input value is \
+a number*)
+    
+    (*since this list was put through the convert instruments module*)
+    (*each intsrument will be represented as a number*)
+    If[IntegerQ[NewPList[[a, 3]]] == False,
+     Print[
+      "Please make sure the instrument of choice is represented by a number"];
+     Print["This is the line the program stopped on"];
+     Return[NewPList[[a]]];
+     ];(*end if*)
+    
+    (*makes sure the number representing the instrument is not less than 1*)
+    If[NewPList[[a, 3]] < 1,
+     Print["The MIDI file location cannot be less than 1"];
+     Print["This is the line the program stopped on"];
+     Return[NewPList[[a]]];
+     ];(*end if*)
+    
+    (*makes sure the number representing the instrument is not greater than \
+128*)
+    If[NewPList[[a, 3]] > 128,
+     Print["This MIDI file location cannot be greater than 1"];
+     Print["This is the line the program stopped on"];
+     Return[NewPList[[a]]];
+     ];(*end if*)
+    
+    (*once everything is checked and is correct, 
+    we will add the element to a*)
+    (*list that will consist of both pitched and non-pitched instruments*)
+    NoteList = Append[NoteList, NewPList[[a]]];
+    
+    
+    ];(*end for loop a*)
+   (*this is the end of checking all elements of the pitched instrument list*)
+\
+
+   
+   (****************************************************************)
+   (*the is the start of doing the NotPitched instrument check*)
+   (*Since notpitched instruments have different parameters when dealing with \
+the built-in SoundNote feature*)
+   (*there needs to be a completely different check*)
+   (****************************************************************)
+   
+   (*note that the convert instruments module already checked to make sure \
+these *)
+   (*instruments are correct, so do not need to code it here*)
+   
+   (*only need to check to make sure the timing portion of each SoundNote is \
+represented*)
+   (*as a list with two integers in it, in order from lowest to highest*)
+   For[e = 1, e <= Length[NewNotPList], e++,
+    
+    (*check to see if it is a list length 2*)
+    If[ListQ[NewNotPList[[e, 2]]] == False,
+     Print[
+      "Make sure the note lengths are represented using a list of two \
+integers."];
+     Print["This is the line the program stopped on"];
+     Return[NewNotPList[[e]]];
+     ];(*end if*)
+    
+    If[Length[NewNotPList[[e, 2]]] != 2,
+     Print[
+      "Make sure each note length is represented as a list of two numbers"];
+     Print["This is the line the program stopped on"];
+     Return[NewNotPList[[e, 2]]];
+     ];(*end if*)
+    
+    (*makes sure both entries are numbers*)
+    If[NumberQ[NewNotPList[[e, 2, 1]]] == False,
+     Print["Note lengths need to be represented as positive numbers"];
+     Print["This is the line the program stopped on"];
+     Return[NewNotPList[[e]]];
+     ];
+    
+    If[NumberQ[NewNotPList[[e, 2, 2]]] == False,
+     Print["Note lengths need to be represented as positive numbers"];
+     Print["This is the line the program stopped on"];
+     Return[NewNotPList[[e]]];
+     ];
+    
+    (*makes sure the first entry is greater than 0*)
+    (*don't have to check the second number to see if its greater than 0 \
+because the*)
+    (*second number needs to be greater than the first*)
+    If[NewNotPList[[e, 2, 1]] < 0,
+     Print["Note lengths need to be represented as positive integers."];
+     Print["This is the line the program stopped on"];
+     Return[NewNotPList[[e]]];
+     ];(*end if*)
+    
+    (*sees if second number is greater than first*)
+    If[NewNotPList[[e, 2, 1]] > NewNotPList[[e, 2, 2]],
+     Print[
+      "The integers representing note length need to be in order from least \
+to greatest."];
+     Print["This is the line the program stopped on"];
+     Return[NewNotPList[[e]]];
+     ];
+    
+    (*once everything is checked and is correct, 
+    we will add the element to a*)
+    (*list that will consist of both pitched and non-pitched instruments*)
+    NoteList = Append[NoteList, NewNotPList[[e]]];
+    
+    ];(*end e for loop*)
+   
+   (*end of non-pitched section*)
+   (*****************************************************************)
+   
+   Beats = NewPList[[1, 2, 2]];
+   
+   If[debug == True,
+    Print["This is NewPList[[1,2,2]]"];
+    Print[Beats];
+    ];(*end debug*)
+   
+   (*We are going to go through the list to find the total amount of beats*)
+   (*that the inputted set of notes uses*)
+   (*Since it is a list, the notes don't necessarily have to be in order, 
+   so we*)
+   (*need to cycle through each element to find the largest number*)
+   
+   For[b = 1, b <= Length[NewPList], b++,
+    
+    If[NewPList[[b, 2, 2]] > Beats,
+      Beats = NewPList[[b, 2, 2]];
+      ];(*end if statement*)
+    
+    ];(*end for loop*)
+   
+   If[debug == True,
+    Print["After cycling through all of the pitched instruments, this is the \
+largest value for beats"];
+    Print[Beats];
+    ];(*end debug*)
+   
+   (*There is a possibility that there are more beats in the unpitched \
+instruments*)
+   (*than the pitched instruments, 
+   so we need to cycle through that as well*)
+   
+   For[c = 1, c <= Length[NotPitched], c++,
+    
+    If[NotPitched[[c, 2, 2]] > Beats,
+      Beats = NotPitched[[c, 2, 2]];
+      ];(*end if*)
+    
+    ];(*end for loop*)
+   
+   If[debug == True,
+    Print["After cycling through all of the NotPitched instruments, this is \
+the largest value for beats."];
+    Print[Beats];
+    ];(*end debug*)
+   
+   (*Now we know how many beats the desired sound has, 
+   by default the BPM is 60*)
+   (*Therefore, it will take *Beats* 
+   amount of seconds to run through the music*)
+   (*need to calculate how long the program should run so that it equals the \
+desired BPM*)
+   (*total beats = beats*)
+   
+   Tempo = Beats * 60/BPM;
+   If[debug == True,
+    Print["This is the number than needs to be input so the song plays at the \
+desired tempo"];
+    Print[Tempo];
+    ];(*end debug*)
+   
+   Print[Sound[NoteList, Tempo]];
+   ];(*end module*)
+
+
+Music[{SoundNote["G", {0, 2}, "Piano"]}, {SoundNote["Snare", {0, 2}]}, 1]
+
+
+
+The following portion will be dedicated to testing the Module above.
+
+
+Music[1, 2, 1]
+
+"Please input a list into the first parameter"
+
+Music[{SoundNote["G", {0, 2}, "Piano"]}, {SoundNote["Snare", {0, 2}]}, 0]
+
+"Please input a positive integer for the desired tempo."
+
+Music[{SoundNote["G", {0, 2}, "Piano"]}, {SoundNote["Snare", {0, 2}]}, 0.1]
+
+"Please input an integer for the desired tempo"
+
+Music[{SoundNote["Snare", {0, 2}]}, {SoundNote["G", {0, 2}, "Piano"]}, 1]
+
+You can only input a list of pitched instruments into this module
+
+Error found in Convert Music Notes program
+
+Error found in converting instruments program
+
+Part::partd: Part specification Please input a list of Pitched or Unpitched Instruments[[1]] is longer than depth of object.
+
+"Double check to make sure that the Pitched instrument list is the first \
+input and the unpitched instrument list is the second input"
+
+Music[{SoundNote["G ", {0, 2}, "Piano"]}, {SoundNote["Snare", {0, 2}]}, 1]
+
+Please make sure you input a numerical value in for the first part of each soundnote line
+
+This is the line the program stopped on
+
+SoundNote["G ", {0, 2}, 1]
+
+Music[{SoundNote[-49, {0, 2}, "Piano"]}, {SoundNote["Snare", {0, 2}]}, 1]
+
+You cannot have a note value lower than -48
+
+This is the line the program stopped on
+
+SoundNote[-49, {0, 2}, 1]
+
+Music[{SoundNote[61, {0, 2}, "Piano"]}, {SoundNote["Snare", {0, 2}]}, 1]
+
+You cannot have a note value higher than 60
+
+This is the line the program stopped on
+
+SoundNote[61, {0, 2}, 1]
+
+Music[{SoundNote[{3, 61}, {0, 2}, "Piano"]}, {SoundNote["Snare", {0, 2}]}, 1]
+
+You cannot have a note value higher than 60
+
+This is the line the program stopped on
+
+SoundNote[{3, 61}, {0, 2}, 1]
+
+Music[{SoundNote[{23, "Hello"}, {0, 2}, "Piano"]}, {SoundNote[
+   "Snare", {0, 2}]}, 1]
+
+Please make sure every number in the first list of the following code is an integer
+
+This is the line the program stopped on
+
+SoundNote[{23, "Hello"}, {0, 2}, 1]
+
+Music[{SoundNote["G", 2, "Piano"]}, {SoundNote["Snare", {0, 2}]}, 1]
+
+Make sure the note lengths are represented using a list of two numbers.
+
+This is the line the program stopped on
+
+SoundNote[7, 2, 1]
+
+Music[{SoundNote["G", {0, 2, 3}, "Piano"]}, {SoundNote["Snare", {0, 2}]}, 1]
+
+Make sure each note length is represented as a list of two numbers
+
+This is the line the program stopped on
+
+SoundNote[7, {0, 2, 3}, 1]
+
+Music[{SoundNote["G", {0, "Cello"}, "Piano"]}, {SoundNote["Snare", {0, 2}]},
+  1]
+
+Make sure each note length is represented as a list of two numbers
+
+This is the line the program stopped on
+
+SoundNote[7, {0, "Cello"}, 1]
+
+Music[{SoundNote["G", {-1, 2}, "Piano"]}, {SoundNote["Snare", {0, 2}]}, 1]
+
+The list representing note lengths cannot contain a negative number.
+
+This is the line the program stopped on
+
+SoundNote[7, {-1, 2}, 1]
+
+Music[{SoundNote["G", {3, 2}, "Piano"]}, {SoundNote["Snare", {0, 2}]}, 1]
+
+Please input the two numbers that are representing the note length from lest to greatest
+
+This is the line the program stopped on
+
+SoundNote[7, {3, 2}, 1]
+
+Music[{SoundNote["G", {0, 2}, 0]}, {SoundNote["Snare", {0, 2}]}, 1]
+
+The MIDI file location cannot be less than 1
+
+This is the line the program stopped on
+
+SoundNote[7, {0, 2}, 0]
+
+Music[{SoundNote["G", {0, 2}, "Piano "]}, {SoundNote["Snare", {0, 2}]}, 1]
+
+Please make sure the instrument of choice is represented by a number
+
+This is the line the program stopped on
+
+SoundNote[7, {0, 2}, "Piano "]
+
+Music[{SoundNote["G", {0, 2}, 129]}, {SoundNote["Snare", {0, 2}]}, 1]
+
+This MIDI file location cannot be greater than 1
+
+This is the line the program stopped on
+
+SoundNote[7, {0, 2}, 129]
+
+Music[{SoundNote["G", {0, 2}, 12.9]}, {SoundNote["Snare", {0, 2}]}, 1]
+
+Please make sure the instrument of choice is represented by a number
+
+This is the line the program stopped on
+
+SoundNote[7, {0, 2}, 12.9]
+
+Music[{SoundNote["G", {0, 2}, "Piano"]}, {SoundNote["Snare", 2]}, 1]
+
+Make sure the note lengths are represented using a list of two integers.
+
+This is the line the program stopped on
+
+SoundNote["Snare", 2]
+
+Music[{SoundNote["G", {0, 2}, "Piano"]}, {SoundNote["Snare", {0, 2, 6}]}, 1]
+
+Make sure each note length is represented as a list of two numbers
+
+This is the line the program stopped on
+
+{0, 2, 6}
+
+Music[{SoundNote["G", {0, 2}, "Piano"]}, {SoundNote["Snare", {0, "Piano"}]},
+  1]
+
+Note lengths need to be represented as positive numbers
+
+This is the line the program stopped on
+
+SoundNote["Snare", {0, "Piano"}]
+
+Music[{SoundNote["G", {0, 2}, "Piano"]}, {SoundNote["Snare", {-1, 2}]}, 1]
+
+Note lengths need to be represented as positive integers.
+
+This is the line the program stopped on
+
+SoundNote["Snare", {-1, 2}]
+
+Music[{SoundNote["G", {0, 2}, "Piano"]}, {SoundNote["Snare", {3, 2}]}, 1]
+
+The integers representing note length need to be in order from least to greatest.
+
+This is the line the program stopped on
+
+SoundNote["Snare", {3, 2}]
+
+Music[{SoundNote["G", {0, 2}, "Piano"]}, {SoundNote["Snare", {0, 2}]}, 1]
+
+
+
+
+
+Now that we've created a way to identify any flaws when writing music in Mathematica, we can safely write densely scored pieces/ very long songs without having to check every single character looking for a mistake.
+
+Results:
+Below is an arrangement of "The Imperial March" from Star Wars that I've coded using Mathematica.  I've run it through the "Music" module, so there are no errors.  Here's the final product!
+
+
+Music[StarWarsPitchedInstruments, StarWarsUnpitchedInstruments, 88]
+
+
+
+
+
+StarWarsPitchedInstruments = {SoundNote[{-5}, {0, .5}, "FrenchHorn"], 
+   SoundNote["G3", {1, 1.5}, "FrenchHorn"], 
+   SoundNote["G3", {1.5, 1.5 + 1/6}, "FrenchHorn"], 
+   SoundNote["G3", {1.5 + 1/6, 1.5 + 2/6}, "FrenchHorn"], 
+   SoundNote["G3", {1.5 + 2/6, 2}, "FrenchHorn"], 
+   SoundNote["G3", {2, 2.5}, "FrenchHorn"], 
+   SoundNote["G3", {2.5, 2.5 + 1/6}, "FrenchHorn"], 
+   SoundNote["G3", {2.5 + 1/6, 2.5 + 2/6}, "FrenchHorn"], 
+   SoundNote["G3", {2.5 + 2/6, 3}, "FrenchHorn"], 
+   SoundNote["Eb4", {3, 3 + 1/6}, "FrenchHorn"], 
+   SoundNote["Eb4", {3 + 1/6, 3 + 2/6}, "FrenchHorn"], 
+   SoundNote["Eb4", {3 + 2/6, 3.5}, "FrenchHorn"], 
+   SoundNote["Eb4", {3.5, 4}, "FrenchHorn"], 
+   SoundNote["G3", {4, 4.5}, "FrenchHorn"], 
+   SoundNote["Bb3", {3, 3 + 1/6}, "FrenchHorn"], 
+   SoundNote["Bb3", {3 + 1/6, 3 + 2/6}, "FrenchHorn"], 
+   SoundNote["Bb3", {3 + 2/6, 3.5}, "FrenchHorn"], 
+   SoundNote["Bb3", {3.5, 4}, "FrenchHorn"], 
+   SoundNote["G3", {4, 4.5}, "FrenchHorn"], 
+   SoundNote["F#3", {3, 3 + 1/6}, "FrenchHorn"], 
+   SoundNote["F#3", {3 + 1/6, 3 + 2/6}, "FrenchHorn"], 
+   SoundNote["F#3", {3 + 2/6, 3.5}, "FrenchHorn"], 
+   SoundNote["F#3", {3.5, 4}, "FrenchHorn"],(*m2*)
+   SoundNote["G3", {4, 4.5}, "FrenchHorn"], 
+   SoundNote["G3", {5, 5.5}, "FrenchHorn"], 
+   SoundNote["G3", {5.5, 5.5 + 1/6}, "FrenchHorn"], 
+   SoundNote["G3", {5.5 + 1/6, 5.5 + 2/6}, "FrenchHorn"], 
+   SoundNote["G3", {5.5 + 2/6, 6}, "FrenchHorn"], 
+   SoundNote["G3", {6, 6.5}, "FrenchHorn"], 
+   SoundNote["G3", {6.5, 6.5 + 1/6}, "FrenchHorn"], 
+   SoundNote["G3", {6.5 + 1/6, 6.5 + 2/6}, "FrenchHorn"], 
+   SoundNote["G3", {6.5 + 2/6, 7}, "FrenchHorn"], 
+   SoundNote["Eb4", {7, 7 + 1/6}, "FrenchHorn"], 
+   SoundNote["Eb4", {7 + 1/6, 7 + 2/6}, "FrenchHorn"], 
+   SoundNote["Eb4", {7 + 2/6, 7.5}, "FrenchHorn"], 
+   SoundNote["Eb4", {7.5, 8}, "FrenchHorn"], 
+   SoundNote["G3", {8, 8.5}, "FrenchHorn"], 
+   SoundNote["Bb3", {7, 7 + 1/6}, "FrenchHorn"], 
+   SoundNote["Bb3", {7 + 1/6, 7 + 2/6}, "FrenchHorn"], 
+   SoundNote["Bb3", {7 + 2/6, 7.5}, "FrenchHorn"], 
+   SoundNote["Bb3", {7.5, 8}, "FrenchHorn"], 
+   SoundNote["G3", {8, 8.5}, "FrenchHorn"], 
+   SoundNote["F#3", {7, 7 + 1/6}, "FrenchHorn"], 
+   SoundNote["F#3", {7 + 1/6, 7 + 2/6}, "FrenchHorn"], 
+   SoundNote["F#3", {7 + 2/6, 7.5}, "FrenchHorn"], 
+   SoundNote["F#3", {7.5, 8}, "FrenchHorn"],(*m3*)
+   SoundNote["G3", {8, 8.5}, 
+    "FrenchHorn"](*write this 2 more times cause rhythm same*), 
+   SoundNote["G3", {9, 9.5}, "FrenchHorn"], 
+   SoundNote["G3", {9.5, 9.5 + 1/6}, "FrenchHorn"], 
+   SoundNote["G3", {9.5 + 1/6, 9.5 + 2/6}, "FrenchHorn"], 
+   SoundNote["G3", {9.5 + 2/6, 10}, "FrenchHorn"], 
+   SoundNote["G3", {10, 10.5}, "FrenchHorn"], 
+   SoundNote["G3", {10.5, 10.5 + 1/6}, "FrenchHorn"], 
+   SoundNote["G3", {10.5 + 1/6, 10.5 + 2/6}, "FrenchHorn"], 
+   SoundNote["G3", {10.5 + 2/6, 11}, "FrenchHorn"], 
+   SoundNote["F#4", {11, 11 + 1/6}, "FrenchHorn"], 
+   SoundNote["F#4", {11 + 1/6, 11 + 2/6}, "FrenchHorn"], 
+   SoundNote["F#4", {11 + 2/6, 11.5}, "FrenchHorn"], 
+   SoundNote["F#4", {11.5, 12}, "FrenchHorn"], 
+   SoundNote["G3", {12, 12.5}, "FrenchHorn"], 
+   SoundNote["A3", {11, 11 + 1/6}, "FrenchHorn"], 
+   SoundNote["A3", {11 + 1/6, 11 + 2/6}, "FrenchHorn"], 
+   SoundNote["A3", {11 + 2/6, 11.5}, "FrenchHorn"], 
+   SoundNote["A3", {11.5, 12}, "FrenchHorn"], 
+   SoundNote["G3", {12, 12.5}, "FrenchHorn"], 
+   SoundNote["Eb4", {11, 11 + 1/6}, "FrenchHorn"], 
+   SoundNote["Eb4", {11 + 1/6, 11 + 2/6}, "FrenchHorn"], 
+   SoundNote["Eb4", {11 + 2/6, 11.5}, "FrenchHorn"], 
+   SoundNote["Eb4", {11.5, 12}, "FrenchHorn"], 
+   SoundNote["Bb3", {11, 11 + 1/6}, "FrenchHorn"], 
+   SoundNote["Bb3", {11 + 1/6, 11 + 2/6}, "FrenchHorn"], 
+   SoundNote["Bb3", {11 + 2/6, 11.5}, "FrenchHorn"], 
+   SoundNote["Bb3", {11.5, 12}, "FrenchHorn"],(*m4*)
+   SoundNote["G3", {12, 12.5}, "FrenchHorn"], 
+   SoundNote["G3", {13, 13.5}, "FrenchHorn"], 
+   SoundNote["G3", {13.5, 13.5 + 1/6}, "FrenchHorn"], 
+   SoundNote["G3", {13.5 + 1/6, 13.5 + 2/6}, "FrenchHorn"], 
+   SoundNote["G3", {13.5 + 2/6, 14}, "FrenchHorn"], 
+   SoundNote["G3", {14, 14.5}, "FrenchHorn"], 
+   SoundNote["G3", {14.5, 14.5 + 1/6}, "FrenchHorn"], 
+   SoundNote["G3", {14.5 + 1/6, 14.5 + 2/6}, "FrenchHorn"], 
+   SoundNote["G3", {14.5 + 2/6, 15}, "FrenchHorn"], 
+   SoundNote["F#4", {15, 15 + 1/6}, "FrenchHorn"], 
+   SoundNote["F#4", {15 + 1/6, 15 + 2/6}, "FrenchHorn"], 
+   SoundNote["F#4", {15 + 2/6, 15.5}, "FrenchHorn"], 
+   SoundNote["F#4", {15.5, 16}, "FrenchHorn"], 
+   SoundNote["A3", {15, 15 + 1/6}, "FrenchHorn"], 
+   SoundNote["A3", {15 + 1/6, 15 + 2/6}, "FrenchHorn"], 
+   SoundNote["A3", {15 + 2/6, 15.5}, "FrenchHorn"], 
+   SoundNote["A3", {15.5, 16}, "FrenchHorn"], 
+   SoundNote["G3", {16, 16.5}, "FrenchHorn"], 
+   SoundNote["Eb4", {15, 15 + 1/6}, "FrenchHorn"], 
+   SoundNote["Eb4", {15 + 1/6, 15 + 2/6}, "FrenchHorn"], 
+   SoundNote["Eb4", {15 + 2/6, 15.5}, "FrenchHorn"], 
+   SoundNote["Eb4", {15.5, 16}, "FrenchHorn"], 
+   SoundNote["Bb3", {15, 15 + 1/6}, "FrenchHorn"], 
+   SoundNote["Bb3", {15 + 1/6, 15 + 2/6}, "FrenchHorn"], 
+   SoundNote["Bb3", {15 + 2/6, 15.5}, "FrenchHorn"], 
+   SoundNote["Bb3", {15.5, 16}, "FrenchHorn"],(*m3*)
+   SoundNote["G3", {16, 16.5}, "FrenchHorn"], 
+   SoundNote["G3", {22, 22.5}, "FrenchHorn"],(**)
+   SoundNote["G3", {22, 22.5}, "FrenchHorn"], 
+   SoundNote["G3", {22.5, 22.5 + 1/6}, "FrenchHorn"], 
+   SoundNote["G3", {22.5 + 1/6, 22.5 + 2/6}, "FrenchHorn"], 
+   SoundNote["G3", {22.5 + 2/6, 23}, "FrenchHorn"], 
+   SoundNote["F#4", {23, 23 + 1/6}, "FrenchHorn"], 
+   SoundNote["F#4", {23 + 1/6, 23 + 2/6}, "FrenchHorn"], 
+   SoundNote["F#4", {23 + 2/6, 23.5}, "FrenchHorn"], 
+   SoundNote["F#4", {23.5, 24}, "FrenchHorn"], 
+   SoundNote["A3", {23, 23 + 1/6}, "FrenchHorn"], 
+   SoundNote["A3", {23 + 1/6, 23 + 2/6}, "FrenchHorn"], 
+   SoundNote["A3", {23 + 2/6, 23.5}, "FrenchHorn"], 
+   SoundNote["A3", {23.5, 24}, "FrenchHorn"], 
+   SoundNote["Eb4", {23, 23 + 1/6}, "FrenchHorn"], 
+   SoundNote["Eb4", {23 + 1/6, 23 + 2/6}, "FrenchHorn"], 
+   SoundNote["Eb4", {23 + 2/6, 23.5}, "FrenchHorn"], 
+   SoundNote["Eb4", {23.5, 24}, "FrenchHorn"], 
+   SoundNote["Bb3", {23, 23 + 1/6}, "FrenchHorn"], 
+   SoundNote["Bb3", {23 + 1/6, 23 + 2/6}, "FrenchHorn"], 
+   SoundNote["Bb3", {23 + 2/6, 23.5}, "FrenchHorn"], 
+   SoundNote["Bb3", {23.5, 24}, "FrenchHorn"],(**)
+   SoundNote["G3", {30, 30.5}, "FrenchHorn"], 
+   SoundNote["D4", {30.5, 30.5 + 1/6}, "FrenchHorn"], 
+   SoundNote["D4", {30.5 + 1/6, 30.5 + 2/6}, "FrenchHorn"], 
+   SoundNote["D4", {30.5 + 2/6, 31}, "FrenchHorn"], 
+   SoundNote["Eb4", {31, 31 + 1/6}, "FrenchHorn"], 
+   SoundNote["Eb4", {31 + 1/6, 31 + 2/6}, "FrenchHorn"], 
+   SoundNote["Eb4", {31 + 2/6, 31.5}, "FrenchHorn"], 
+   SoundNote["F4", {31.5, 32}, "FrenchHorn"], 
+   SoundNote["Bb3", {30.5, 30.5 + 1/6}, "FrenchHorn"], 
+   SoundNote["Bb3", {30.5 + 1/6, 30.5 + 2/6}, "FrenchHorn"], 
+   SoundNote["Bb3", {30.5 + 2/6, 31}, "FrenchHorn"], 
+   SoundNote["B3", {31, 31 + 1/6}, "FrenchHorn"], 
+   SoundNote["B3", {31 + 1/6, 31 + 2/6}, "FrenchHorn"], 
+   SoundNote["B3", {31 + 2/6, 31.5}, "FrenchHorn"], 
+   SoundNote["Db4", {31.5, 32}, "FrenchHorn"],(**)
+   SoundNote["G3", {22, 22.5}, "FrenchHorn"], 
+   SoundNote["G3", {22.5, 22.5 + 1/6}, "FrenchHorn"], 
+   SoundNote["G3", {22.5 + 1/6, 22.5 + 2/6}, "FrenchHorn"], 
+   SoundNote["G3", {22.5 + 2/6, 23}, "FrenchHorn"], 
+   SoundNote["F#4", {23, 23 + 1/6}, "FrenchHorn"], 
+   SoundNote["F#4", {23 + 1/6, 23 + 2/6}, "FrenchHorn"], 
+   SoundNote["F#4", {23 + 2/6, 23.5}, "FrenchHorn"], 
+   SoundNote["F#4", {23.5, 24}, "FrenchHorn"], 
+   SoundNote["A3", {23, 23 + 1/6}, "FrenchHorn"], 
+   SoundNote["A3", {23 + 1/6, 23 + 2/6}, "FrenchHorn"], 
+   SoundNote["A3", {23 + 2/6, 23.5}, "FrenchHorn"], 
+   SoundNote["A3", {23.5, 24}, "FrenchHorn"], 
+   SoundNote["Eb4", {23, 23 + 1/6}, "FrenchHorn"], 
+   SoundNote["Eb4", {23 + 1/6, 23 + 2/6}, "FrenchHorn"], 
+   SoundNote["Eb4", {23 + 2/6, 23.5}, "FrenchHorn"], 
+   SoundNote["Eb4", {23.5, 24}, "FrenchHorn"], 
+   SoundNote["Bb3", {23, 23 + 1/6}, "FrenchHorn"], 
+   SoundNote["Bb3", {23 + 1/6, 23 + 2/6}, "FrenchHorn"], 
+   SoundNote["Bb3", {23 + 2/6, 23.5}, "FrenchHorn"], 
+   SoundNote["Bb3", {23.5, 24}, "FrenchHorn"],(**)
+   SoundNote["G3", {30, 30.5}, "FrenchHorn"], 
+   SoundNote["D4", {30.5, 30.5 + 1/6}, "FrenchHorn"], 
+   SoundNote["D4", {30.5 + 1/6, 30.5 + 2/6}, "FrenchHorn"], 
+   SoundNote["D4", {30.5 + 2/6, 31}, "FrenchHorn"], 
+   SoundNote["Eb4", {31, 31 + 1/6}, "FrenchHorn"], 
+   SoundNote["Eb4", {31 + 1/6, 31 + 2/6}, "FrenchHorn"], 
+   SoundNote["Eb4", {31 + 2/6, 31.5}, "FrenchHorn"], 
+   SoundNote["F4", {31.5, 32}, "FrenchHorn"], 
+   SoundNote["Bb3", {30.5, 30.5 + 1/6}, "FrenchHorn"], 
+   SoundNote["Bb3", {30.5 + 1/6, 30.5 + 2/6}, "FrenchHorn"], 
+   SoundNote["Bb3", {30.5 + 2/6, 31}, "FrenchHorn"], 
+   SoundNote["B3", {31, 31 + 1/6}, "FrenchHorn"], 
+   SoundNote["B3", {31 + 1/6, 31 + 2/6}, "FrenchHorn"], 
+   SoundNote["B3", {31 + 2/6, 31.5}, "FrenchHorn"], 
+   SoundNote["Db4", {31.5, 32}, "FrenchHorn"],(**)
+   SoundNote["G3", {22, 22.5}, "FrenchHorn"], 
+   SoundNote["G3", {22.5, 22.5 + 1/6}, "FrenchHorn"], 
+   SoundNote["G3", {22.5 + 1/6, 22.5 + 2/6}, "FrenchHorn"], 
+   SoundNote["G3", {22.5 + 2/6, 23}, "FrenchHorn"], 
+   SoundNote["F#4", {23, 23 + 1/6}, "FrenchHorn"], 
+   SoundNote["F#4", {23 + 1/6, 23 + 2/6}, "FrenchHorn"], 
+   SoundNote["F#4", {23 + 2/6, 23.5}, "FrenchHorn"], 
+   SoundNote["F#4", {23.5, 24}, "FrenchHorn"], 
+   SoundNote["A3", {23, 23 + 1/6}, "FrenchHorn"], 
+   SoundNote["A3", {23 + 1/6, 23 + 2/6}, "FrenchHorn"], 
+   SoundNote["A3", {23 + 2/6, 23.5}, "FrenchHorn"], 
+   SoundNote["A3", {23.5, 24}, "FrenchHorn"], 
+   SoundNote["Eb4", {23, 23 + 1/6}, "FrenchHorn"], 
+   SoundNote["Eb4", {23 + 1/6, 23 + 2/6}, "FrenchHorn"], 
+   SoundNote["Eb4", {23 + 2/6, 23.5}, "FrenchHorn"], 
+   SoundNote["Eb4", {23.5, 24}, "FrenchHorn"], 
+   SoundNote["Bb3", {23, 23 + 1/6}, "FrenchHorn"], 
+   SoundNote["Bb3", {23 + 1/6, 23 + 2/6}, "FrenchHorn"], 
+   SoundNote["Bb3", {23 + 2/6, 23.5}, "FrenchHorn"], 
+   SoundNote["Bb3", {23.5, 24}, "FrenchHorn"],(**)
+   SoundNote["G3", {30, 30.5}, "FrenchHorn"], 
+   SoundNote["D4", {30.5, 30.5 + 1/6}, "FrenchHorn"], 
+   SoundNote["D4", {30.5 + 1/6, 30.5 + 2/6}, "FrenchHorn"], 
+   SoundNote["D4", {30.5 + 2/6, 31}, "FrenchHorn"], 
+   SoundNote["Eb4", {31, 31 + 1/6}, "FrenchHorn"], 
+   SoundNote["Eb4", {31 + 1/6, 31 + 2/6}, "FrenchHorn"], 
+   SoundNote["Eb4", {31 + 2/6, 31.5}, "FrenchHorn"], 
+   SoundNote["F4", {31.5, 32}, "FrenchHorn"], 
+   SoundNote["Bb3", {30.5, 30.5 + 1/6}, "FrenchHorn"], 
+   SoundNote["Bb3", {30.5 + 1/6, 30.5 + 2/6}, "FrenchHorn"], 
+   SoundNote["Bb3", {30.5 + 2/6, 31}, "FrenchHorn"], 
+   SoundNote["B3", {31, 31 + 1/6}, "FrenchHorn"], 
+   SoundNote["B3", {31 + 1/6, 31 + 2/6}, "FrenchHorn"], 
+   SoundNote["B3", {31 + 2/6, 31.5}, "FrenchHorn"], 
+   SoundNote["Db4", {31.5, 32}, "FrenchHorn"],
+   (*************)SoundNote[{"G4", "Eb4", "Bb3", "G3"}, {48, 49.5}, 
+    "FrenchHorn"], 
+   SoundNote[{"G4", "D4", "Bb3", "G3"}, {50, 51.5}, "FrenchHorn"], 
+   SoundNote[{"E4", "C#4", "G#3", "E3"}, {52, 53.5}, "FrenchHorn"], 
+   SoundNote[{"C#4", "G#3", "G#3", "E3"}, {54, 55.5}, 
+    "FrenchHorn"],(**)(*end horn part*)
+   (*start trumpet and trombone part*)
+   (*******************************************************************)
+   SoundNote["G4", {16, 17}, "Trumpet"], SoundNote["G4", {17, 18}, "Trumpet"],
+    SoundNote["G4", {18, 19}, "Trumpet"], 
+   SoundNote["Eb4", {19, 19.75}, "Trumpet"], 
+   SoundNote["Bb4", {19.75, 20}, "Trumpet"], 
+   SoundNote["G4", {20, 21}, "Trumpet"], 
+   SoundNote["Eb4", {21, 21.75}, "Trumpet"], 
+   SoundNote["Bb4", {21.75, 22}, "Trumpet"], 
+   SoundNote["G4", {22, 24}, "Trumpet"], SoundNote["D5", {24, 25}, "Trumpet"],
+    SoundNote["D5", {25, 26}, "Trumpet"], 
+   SoundNote["D5", {26, 27}, "Trumpet"], 
+   SoundNote["Eb5", {27, 27.75}, "Trumpet"], 
+   SoundNote["Bb4", {27.75, 28}, "Trumpet"], 
+   SoundNote["Gb4", {28, 29}, "Trumpet"], 
+   SoundNote["Eb4", {29, 29.75}, "Trumpet"], 
+   SoundNote["Bb4", {29.75, 30}, "Trumpet"], 
+   SoundNote["G4", {30, 32}, "Trumpet"],(******************************)
+   SoundNote["G5", {32, 33}, "Trumpet"], 
+   SoundNote["G4", {33, 33.75}, "Trumpet"], 
+   SoundNote["G4", {33.75, 34}, "Trumpet"], 
+   SoundNote["G5", {34, 35}, "Trumpet"], 
+   SoundNote["F#5", {35, 35.75}, "Trumpet"], 
+   SoundNote["F5", {35.75, 36}, "Trumpet"], 
+   SoundNote["E5", {36, 36.25}, "Trumpet"], 
+   SoundNote["Eb5", {36.25, 36.5}, "Trumpet"], 
+   SoundNote["E5", {36.5, 37}, "Trumpet"], 
+   SoundNote["G#4", {37.5, 38}, "Trumpet"], 
+   SoundNote["C#5", {38, 39}, "Trumpet"], 
+   SoundNote["C5", {39, 39.75}, "Trumpet"], 
+   SoundNote["B4", {39.75, 40}, "Trumpet"], 
+   SoundNote["Bb4", {40, 40.25}, "Trumpet"], 
+   SoundNote["A4", {40.25, 40.5}, "Trumpet"], 
+   SoundNote["Bb4", {40.5, 41}, "Trumpet"], 
+   SoundNote["Eb4", {41.5, 42}, "Trumpet"], 
+   SoundNote["Gb4", {42, 43}, "Trumpet"], 
+   SoundNote["Eb4", {43, 43.75}, "Trumpet"], 
+   SoundNote["G4", {43.75, 44}, "Trumpet"], 
+   SoundNote["Bb4", {44, 45}, "Trumpet"], 
+   SoundNote["G4", {45, 45.75}, "Trumpet"], 
+   SoundNote["Bb4", {45.75, 46}, "Trumpet"], 
+   SoundNote["D5", {46, 48}, "Trumpet"],(*********************************)
+   SoundNote["G5", {48, 49}, "Trumpet"], 
+   SoundNote["G4", {49, 49.75}, "Trumpet"], 
+   SoundNote["G4", {49.75, 50}, "Trumpet"], 
+   SoundNote["G5", {50, 51}, "Trumpet"], 
+   SoundNote["F#5", {51, 51.75}, "Trumpet"], 
+   SoundNote["F5", {51.75, 52}, "Trumpet"], 
+   SoundNote["E5", {52, 52.25}, "Trumpet"], 
+   SoundNote["Eb5", {52.25, 52.5}, "Trumpet"], 
+   SoundNote["E5", {52.5, 53}, "Trumpet"], 
+   SoundNote["G#4", {53.5, 54}, "Trumpet"], 
+   SoundNote[{"C#5", "E4", "G#4"}, {54, 55}, "Trumpet"], 
+   SoundNote[{"C5", "E4", "G#4"}, {55, 55.75}, "Trumpet"], 
+   SoundNote[{"B4", "E4", "G#4"}, {55.75, 56}, "Trumpet"], 
+   SoundNote[{"Bb4", "Eb4", "Gb4"}, {56, 56.25}, "Trumpet"], 
+   SoundNote[{"A4", "Eb4", "Gb4"}, {56.25, 56.5}, "Trumpet"], 
+   SoundNote[{"Bb4", "Eb4", "Gb4"}, {56.5, 57}, "Trumpet"], 
+   SoundNote["Eb4", {57.5, 58}, "Trumpet"], 
+   SoundNote[{"Gb4", "Eb4", "Bb3"}, {58, 59}, "Trumpet"], 
+   SoundNote["Eb4", {59, 59.75}, "Trumpet"], 
+   SoundNote["Bb4", {59.75, 60}, "Trumpet"], 
+   SoundNote["G4", {60, 61}, "Trumpet"], 
+   SoundNote["Eb4", {61, 61.75}, "Trumpet"], 
+   SoundNote["Bb4", {61.75, 62}, "Trumpet"], 
+   SoundNote["G4", {62, 64}, "Trumpet"],(*********************************)(********************************************************************)
+
+   
+   SoundNote["G3", {16, 17}, "Trombone"], 
+   SoundNote["G3", {17, 18}, "Trombone"], 
+   SoundNote["G3", {18, 19}, "Trombone"], 
+   SoundNote["Eb3", {19, 19.75}, "Trombone"], 
+   SoundNote["Bb3", {19.75, 20}, "Trombone"], 
+   SoundNote["G3", {20, 21}, "Trombone"], 
+   SoundNote["Eb3", {21, 21.75}, "Trombone"], 
+   SoundNote["Bb3", {21.75, 22}, "Trombone"], 
+   SoundNote["G3", {22, 24}, "Trombone"], 
+   SoundNote["D4", {24, 25}, "Trombone"], 
+   SoundNote["D4", {25, 26}, "Trombone"], 
+   SoundNote["D4", {26, 27}, "Trombone"], 
+   SoundNote["Eb4", {27, 27.75}, "Trombone"], 
+   SoundNote["Bb3", {27.75, 28}, "Trombone"], 
+   SoundNote["Gb3", {28, 29}, "Trombone"], 
+   SoundNote["Eb3", {29, 29.75}, "Trombone"], 
+   SoundNote["Bb3", {29.75, 30}, "Trombone"], 
+   SoundNote["G3", {30, 32}, "Trombone"],(******************************)
+   SoundNote["G4", {32, 33}, "Trombone"], 
+   SoundNote["G3", {33, 33.75}, "Trombone"], 
+   SoundNote["G3", {33.75, 34}, "Trombone"], 
+   SoundNote["G4", {34, 35}, "Trombone"], 
+   SoundNote["F#4", {35, 35.75}, "Trombone"], 
+   SoundNote["F4", {35.75, 36}, "Trombone"], 
+   SoundNote["E4", {36, 36.25}, "Trombone"], 
+   SoundNote["Eb4", {36.25, 36.5}, "Trombone"], 
+   SoundNote["E4", {36.5, 37}, "Trombone"], 
+   SoundNote["G#3", {37.5, 38}, "Trombone"], 
+   SoundNote["C#4", {38, 39}, "Trombone"], 
+   SoundNote["C4", {39, 39.75}, "Trombone"], 
+   SoundNote["B3", {39.75, 40}, "Trombone"], 
+   SoundNote["Bb3", {40, 40.25}, "Trombone"], 
+   SoundNote["A3", {40.25, 40.5}, "Trombone"], 
+   SoundNote["Bb3", {40.5, 41}, "Trombone"], 
+   SoundNote["Eb3", {41.5, 42}, "Trombone"], 
+   SoundNote["Gb3", {42, 43}, "Trombone"], 
+   SoundNote["Eb3", {43, 43.75}, "Trombone"], 
+   SoundNote["G3", {43.75, 44}, "Trombone"], 
+   SoundNote["Bb3", {44, 45}, "Trombone"], 
+   SoundNote["G3", {45, 45.75}, "Trombone"], 
+   SoundNote["Bb3", {45.75, 46}, "Trombone"], 
+   SoundNote["D4", {46, 48}, "Trombone"],(***************)
+   SoundNote["G4", {48, 49}, "Trombone"], 
+   SoundNote["G3", {49, 49.75}, "Trombone"], 
+   SoundNote["G3", {49.75, 50}, "Trombone"], 
+   SoundNote["G4", {50, 51}, "Trombone"], 
+   SoundNote["F#4", {51, 51.75}, "Trombone"], 
+   SoundNote["F4", {51.75, 52}, "Trombone"], 
+   SoundNote["E4", {52, 52.25}, "Trombone"], 
+   SoundNote["Eb4", {52.25, 52.5}, "Trombone"], 
+   SoundNote["E4", {52.5, 53}, "Trombone"], 
+   SoundNote["G#3", {53.5, 54}, "Trombone"], 
+   SoundNote[{"C#4", "G#3", "E3"}, {54, 55}, "Trombone"], 
+   SoundNote[{"C4", "G#3", "E3"}, {55, 55.75}, "Trombone"], 
+   SoundNote[{"B3", "G#3", "E3"}, {55.75, 56}, "Trombone"], 
+   SoundNote[{"Bb3", "F#3", "Eb3"}, {56, 56.25}, "Trombone"], 
+   SoundNote[{"A3", "F#3", "Eb3"}, {56.25, 56.5}, "Trombone"], 
+   SoundNote[{"Bb3", "F#3", "Eb3"}, {56.5, 57}, "Trombone"], 
+   SoundNote[{"Eb3"}, {57.5, 58}, "Trombone"], 
+   SoundNote[{"Gb3"}, {58, 59}, "Trombone"], 
+   SoundNote[{"Gb3", "Eb4", "Bb3"}, {59, 60}, "Trombone"], 
+   SoundNote[{"G3"}, {60, 61}, "Trombone"], 
+   SoundNote[{"Gb3", "Eb4", "C3"}, {61, 62}, "Trombone"], 
+   SoundNote[{"G3", "G2"}, {62, 64}, "Trombone"],
+   (***********************************************************************)
+   SoundNote[{"G3", "G2"}, {0, .5}, "Violin"], 
+   SoundNote[{"G3", "G2"}, {1, 1.5}, "Violin"], 
+   SoundNote[{"G3", "G2"}, {1.5, 1.5 + 1/6}, "Violin"], 
+   SoundNote[{"G3", "G2"}, {1.5 + 1/6, 1.5 + 2/6}, "Violin"], 
+   SoundNote[{"G3", "G2"}, {1.5 + 2/6, 2}, "Violin"], 
+   SoundNote[{"G3", "G2"}, {2, 2.5}, "Violin"], 
+   SoundNote[{"G3", "G2"}, {2.5, 2.5 + 1/6}, "Violin"], 
+   SoundNote[{"G3", "G2"}, {2.5 + 1/6, 2.5 + 2/6}, "Violin"], 
+   SoundNote[{"G3", "G2"}, {2.5 + 2/6, 3}, "Violin"], 
+   SoundNote[{"Eb4"}, {3, 3 + 1/6}, "Violin"], 
+   SoundNote[{"Eb4"}, {3 + 1/6, 3 + 2/6}, "Violin"], 
+   SoundNote[{"Eb4"}, {3 + 2/6, 3.5}, "Violin"], 
+   SoundNote[{"Eb4"}, {3.5, 4}, "Violin"], 
+   SoundNote[{"G3", "G2"}, {4, 4.5}, "Violin"], 
+   SoundNote[{"Bb3"}, {3, 3 + 1/6}, "Violin"], 
+   SoundNote[{"Bb3"}, {3 + 1/6, 3 + 2/6}, "Violin"], 
+   SoundNote[{"Bb3"}, {3 + 2/6, 3.5}, "Violin"], 
+   SoundNote[{"Bb3"}, {3.5, 4}, "Violin"], 
+   SoundNote[{"G3"}, {4, 4.5}, "Violin"], 
+   SoundNote[{"F#3"}, {3, 3 + 1/6}, "Violin"], 
+   SoundNote[{"F#3"}, {3 + 1/6, 3 + 2/6}, "Violin"], 
+   SoundNote[{"F#3"}, {3 + 2/6, 3.5}, "Violin"], 
+   SoundNote[{"F#3"}, {3.5, 4}, "Violin"],(*m2*)
+   SoundNote[{"G3"}, {4, 4.5}, "Violin"], 
+   SoundNote[{"G3"}, {5, 5.5}, "Violin"], 
+   SoundNote[{"G3", "G2"}, {5.5, 5.5 + 1/6}, "Violin"], 
+   SoundNote[{"G3", "G2"}, {5.5 + 1/6, 5.5 + 2/6}, "Violin"], 
+   SoundNote[{"G3", "G2"}, {5.5 + 2/6, 6}, "Violin"], 
+   SoundNote[{"G3"}, {6, 6.5}, "Violin"], 
+   SoundNote[{"G3", "G2"}, {6.5, 6.5 + 1/6}, "Violin"], 
+   SoundNote[{"G3", "G2"}, {6.5 + 1/6, 6.5 + 2/6}, "Violin"], 
+   SoundNote[{"G3", "G2"}, {6.5 + 2/6, 7}, "Violin"], 
+   SoundNote["Eb4", {7, 7 + 1/6}, "Violin"], 
+   SoundNote["Eb4", {7 + 1/6, 7 + 2/6}, "Violin"], 
+   SoundNote["Eb4", {7 + 2/6, 7.5}, "Violin"], 
+   SoundNote["Eb4", {7.5, 8}, "Violin"], 
+   SoundNote[{"G3", "G2"}, {8, 8.5}, "Violin"], 
+   SoundNote["Bb3", {7, 7 + 1/6}, "Violin"], 
+   SoundNote["Bb3", {7 + 1/6, 7 + 2/6}, "Violin"], 
+   SoundNote["Bb3", {7 + 2/6, 7.5}, "Violin"], 
+   SoundNote["Bb3", {7.5, 8}, "Violin"], SoundNote["G3", {8, 8.5}, "Violin"], 
+   SoundNote[{"F#3"}, {7, 7 + 1/6}, "Violin"], 
+   SoundNote[{"F#3"}, {7 + 1/6, 7 + 2/6}, "Violin"], 
+   SoundNote[{"F#3"}, {7 + 2/6, 7.5}, "Violin"], 
+   SoundNote[{"F#3"}, {7.5, 8}, "Violin"], 
+   SoundNote[{"G3", "G2"}, {8, 8.5}, 
+    "Violin"](*write this 2 more times cause rhythm same*), 
+   SoundNote[{"G3", "G2"}, {9, 9.5}, "Violin"], 
+   SoundNote[{"G3", "G2"}, {9.5, 9.5 + 1/6}, "Violin"], 
+   SoundNote[{"G3", "G2"}, {9.5 + 1/6, 9.5 + 2/6}, "Violin"], 
+   SoundNote[{"G3", "G2"}, {9.5 + 2/6, 10}, "Violin"], 
+   SoundNote[{"G3", "G2"}, {10, 10.5}, "Violin"], 
+   SoundNote[{"G3", "G2"}, {10.5, 10.5 + 1/6}, "Violin"], 
+   SoundNote[{"G3", "G2"}, {10.5 + 1/6, 10.5 + 2/6}, "Violin"], 
+   SoundNote[{"G3", "G2"}, {10.5 + 2/6, 11}, "Violin"], 
+   SoundNote[{"F#4", "G2"}, {11, 11 + 1/6}, "Violin"], 
+   SoundNote[{"F#4", "G2"}, {11 + 1/6, 11 + 2/6}, "Violin"], 
+   SoundNote[{"F#4", "G2"}, {11 + 2/6, 11.5}, "Violin"], 
+   SoundNote[{"F#4", "G2"}, {11.5, 12}, "Violin"], 
+   SoundNote["G3", {12, 12.5}, "Violin"], 
+   SoundNote["A3", {11, 11 + 1/6}, "Violin"], 
+   SoundNote["A3", {11 + 1/6, 11 + 2/6}, "Violin"], 
+   SoundNote["A3", {11 + 2/6, 11.5}, "Violin"], 
+   SoundNote["A3", {11.5, 12}, "Violin"], 
+   SoundNote["G3", {12, 12.5}, "Violin"], 
+   SoundNote["Eb4", {11, 11 + 1/6}, "Violin"], 
+   SoundNote["Eb4", {11 + 1/6, 11 + 2/6}, "Violin"], 
+   SoundNote["Eb4", {11 + 2/6, 11.5}, "Violin"], 
+   SoundNote["Eb4", {11.5, 12}, "Violin"], 
+   SoundNote["Bb3", {11, 11 + 1/6}, "Violin"], 
+   SoundNote["Bb3", {11 + 1/6, 11 + 2/6}, "Violin"], 
+   SoundNote["Bb3", {11 + 2/6, 11.5}, "Violin"], 
+   SoundNote["Bb3", {11.5, 12}, "Violin"],(*m4*)
+   SoundNote[{"G3", "G2"}, {12, 12.5}, "Violin"], 
+   SoundNote[{"G3", "G2"}, {13, 13.5}, "Violin"], 
+   SoundNote[{"G3", "G2"}, {13.5, 13.5 + 1/6}, "Violin"], 
+   SoundNote[{"G3", "G2"}, {13.5 + 1/6, 13.5 + 2/6}, "Violin"], 
+   SoundNote[{"G3", "G2"}, {13.5 + 2/6, 14}, "Violin"], 
+   SoundNote[{"G3", "G2"}, {14, 14.5}, "Violin"], 
+   SoundNote[{"G3", "G2"}, {14.5, 14.5 + 1/6}, "Violin"], 
+   SoundNote[{"G3", "G2"}, {14.5 + 1/6, 14.5 + 2/6}, "Violin"], 
+   SoundNote[{"G3", "G2"}, {14.5 + 2/6, 15}, "Violin"], 
+   SoundNote[{"F#4", "G2"}, {15, 15 + 1/6}, "Violin"], 
+   SoundNote[{"F#4", "G2"}, {15 + 1/6, 15 + 2/6}, "Violin"], 
+   SoundNote[{"F#4", "G2"}, {15 + 2/6, 15.5}, "Violin"], 
+   SoundNote[{"F#4", "G2"}, {15.5, 16}, "Violin"], 
+   SoundNote["G3", {16, 16.5}, "Violin"], 
+   SoundNote["A3", {15, 15 + 1/6}, "Violin"], 
+   SoundNote["A3", {15 + 1/6, 15 + 2/6}, "Violin"], 
+   SoundNote["A3", {15 + 2/6, 15.5}, "Violin"], 
+   SoundNote["A3", {15.5, 16}, "Violin"], 
+   SoundNote["G3", {16, 16.5}, "Violin"], 
+   SoundNote["Eb4", {15, 15 + 1/6}, "Violin"], 
+   SoundNote["Eb4", {15 + 1/6, 15 + 2/6}, "Violin"], 
+   SoundNote["Eb4", {15 + 2/6, 15.5}, "Violin"], 
+   SoundNote["Eb4", {15.5, 16}, "Violin"], 
+   SoundNote["Bb3", {15, 15 + 1/6}, "Violin"], 
+   SoundNote["Bb3", {15 + 1/6, 15 + 2/6}, "Violin"], 
+   SoundNote["Bb3", {15 + 2/6, 15.5}, "Violin"], 
+   SoundNote["Bb3", {15.5, 16}, "Violin"], 
+   SoundNote["G3", {16, 16.5}, "Violin"],(****************************)
+   SoundNote["G3", {16, 16.5}, "Violin"], 
+   SoundNote["G3", {17, 17.5}, "Violin"], 
+   SoundNote["G3", {17.5, 17.5 + 1/6}, "Violin"], 
+   SoundNote["G3", {17.5 + 1/6, 17.5 + 2/6}, "Violin"], 
+   SoundNote["G3", {17.5 + 2/6, 18}, "Violin"], 
+   SoundNote["G3", {18, 18.5}, "Violin"], 
+   SoundNote["G3", {18.5, 18.5 + 1/6}, "Violin"], 
+   SoundNote["G3", {18.5 + 1/6, 18.5 + 2/6}, "Violin"], 
+   SoundNote["G3", {18.5 + 2/6, 19}, "Violin"], 
+   SoundNote[{"F#4", "A3", "Eb4", "Bb3", "G2"}, {19, 19 + 1/6}, "Violin"], 
+   SoundNote[{"F#4", "A3", "Eb4", "Bb3", "G2"}, {19 + 1/6, 19 + 2/6}, 
+    "Violin"], 
+   SoundNote[{"F#4", "A3", "Eb4", "Bb3", "G2"}, {19 + 2/6, 19.5}, "Violin"], 
+   SoundNote[{"F#4", "A3", "Eb4", "Bb3", "G2"}, {19.5, 20}, "Violin"],(****)
+   SoundNote["G3", {20, 20.5}, "Violin"], 
+   SoundNote["G3", {21, 21.5}, "Violin"], 
+   SoundNote["G3", {21.5, 21.5 + 1/12}, "Violin"], 
+   SoundNote["G3", {21.5 + 1/6, 21.5 + 3/12}, "Violin"], 
+   SoundNote["G3", {21.5 + 2/6, 21.5 + 5/12}, "Violin"], 
+   SoundNote["G3", {22, 22.5}, "Violin"], 
+   SoundNote["G3", {22.5, 22.5 + 1/12}, "Violin"], 
+   SoundNote["G3", {22.5 + 1/6, 22.5 + 3/12}, "Violin"], 
+   SoundNote["G3", {22.5 + 2/6, 22.5 + 5/12}, "Violin"], 
+   SoundNote[{"F#4", "A3", "Eb4", "Bb3", "G2"}, {23, 23 + 1/12}, "Violin"], 
+   SoundNote[{"F#4", "A3", "Eb4", "Bb3", "G2"}, {23 + 1/6, 23 + 3/12}, 
+    "Violin"], 
+   SoundNote[{"F#4", "A3", "Eb4", "Bb3", "G2"}, {23 + 2/6, 23 + 5/12}, 
+    "Violin"], 
+   SoundNote[{"F#4", "A3", "Eb4", "Bb3", "G2"}, {23.5, 24}, 
+    "Violin"],(*currently at m7*)SoundNote["G3", {24, 24.5}, "Violin"], 
+   SoundNote["G3", {25, 25.5}, "Violin"], 
+   SoundNote["G3", {25.5, 25.5 + 1/12}, "Violin"], 
+   SoundNote["G3", {25.5 + 1/6, 25.5 + 3/12}, "Violin"], 
+   SoundNote["G3", {25.5 + 2/6, 25.5 + 5/12}, "Violin"], 
+   SoundNote["G3", {26, 26.5}, "Violin"], 
+   SoundNote["G3", {26.5, 26.5 + 1/12}, "Violin"], 
+   SoundNote["G3", {26.5 + 1/6, 26.5 + 3/12}, "Violin"], 
+   SoundNote["G3", {26.5 + 2/6, 26.5 + 5/12}, "Violin"], 
+   SoundNote[{"F#4", "A3", "Eb4", "Bb3", "G2"}, {27, 27 + 1/12}, "Violin"], 
+   SoundNote[{"F#4", "A3", "Eb4", "Bb3", "G2"}, {27 + 1/6, 27 + 3/12}, 
+    "Violin"], 
+   SoundNote[{"F#4", "A3", "Eb4", "Bb3", "G2"}, {27 + 2/6, 27 + 5/12}, 
+    "Violin"], 
+   SoundNote[{"F#4", "A3", "Eb4", "Bb3", "G2"}, {27.5, 28}, "Violin"],(*m8*)
+   SoundNote[{"Gb4", "Eb4", "Eb3", "Bb3"}, {28, 28.5}, "Violin"], 
+   SoundNote[{"Gb4", "Eb4", "Eb3", "Bb3"}, {29, 29.5}, "Violin"], 
+   SoundNote[{"Gb4", "Eb4", "Eb3", "Bb3"}, {29.5, 29.5 + 1/12}, "Violin"], 
+   SoundNote[{"Gb4", "Eb4", "Eb3", "Bb3"}, {29.5 + 1/6, 29.5 + 3/12}, 
+    "Violin"], 
+   SoundNote[{"Gb4", "Eb4", "Eb3", "Bb3"}, {29.5 + 2/6, 29.5 + 5/12}, 
+    "Violin"], SoundNote[{"G4", "D4", "Bb3", "G2"}, {30, 30.5}, "Violin"], 
+   SoundNote[{"D4", "Bb3", "G2", "Bb3"}, {30.5, 30.5 + 1/12}, "Violin"], 
+   SoundNote[{"D4", "Bb3", "G2", "Bb3"}, {30.5 + 1/6, 30.5 + 3/12}, "Violin"],
+    SoundNote[{"D4", "Bb3", "G2", "Bb3"}, {30.5 + 2/6, 30.5 + 5/12}, 
+    "Violin"], 
+   SoundNote[{"Eb4", "B3", "G2", "B2"}, {31, 31 + 1/12}, "Violin"], 
+   SoundNote[{"Eb4", "B3", "G2", "B2"}, {31 + 1/6, 31 + 3/12}, "Violin"], 
+   SoundNote[{"Eb4", "B3", "G2", "B2"}, {31 + 2/6, 31 + 5/12}, "Violin"], 
+   SoundNote[{"F4", "Db4", "G2", "Db3"}, {31.5, 32}, "Violin"],(*m9*)
+   SoundNote["G4", {32, 32.5}, "Violin"], 
+   SoundNote["G4", {33, 33.5}, "Violin"], 
+   SoundNote["G4", {33.5, 33.5 + 1/12}, "Violin"], 
+   SoundNote["G4", {33.5 + 1/6, 33.5 + 3/12}, "Violin"], 
+   SoundNote["G4", {33.5 + 2/6, 33.5 + 5/12}, "Violin"], 
+   SoundNote["G4", {34, 34.5}, "Violin"], 
+   SoundNote["G4", {34.5, 34.5 + 1/12}, "Violin"], 
+   SoundNote["G4", {34.5 + 1/6, 34.5 + 3/12}, "Violin"], 
+   SoundNote["G4", {34.5 + 2/6, 34.5 + 5/12}, "Violin"], 
+   SoundNote[{"G4", "F#4"}, {35, 35 + 1/12}, "Violin"], 
+   SoundNote[{"G4", "F#3"}, {35 + 1/6, 35 + 3/12}, "Violin"], 
+   SoundNote[{"G4", "F#4"}, {35 + 2/6, 35 + 5/12}, "Violin"], 
+   SoundNote[{"G4", "F4"}, {35.5, 36}, "Violin"](*m10*), 
+   SoundNote[{"G#4", "E4"}, {36, 36.5}, "Violin"], 
+   SoundNote[{"G#4", "E4"}, {37, 37.5}, "Violin"], 
+   SoundNote[{"E4", "C#4"}, {37.5, 37.5 + 1/12}, "Violin"], 
+   SoundNote[{"E4", "C#4"}, {37.5 + 1/6, 37.5 + 3/12}, "Violin"], 
+   SoundNote[{"E4", "C#4"}, {37.5 + 2/6, 37.5 + 5/12}, "Violin"], 
+   SoundNote[{"E4", "C#4"}, {38, 38.5}, "Violin"], 
+   SoundNote[{"E4", "C#4"}, {38.5, 38.5 + 1/12}, "Violin"], 
+   SoundNote[{"E4", "C#4"}, {38.5 + 1/6, 38.5 + 3/12}, "Violin"], 
+   SoundNote[{"E4", "C#4"}, {38.5 + 2/6, 38.5 + 5/12}, "Violin"], 
+   SoundNote[{"E4", "G3", "Ab3", "C4"}, {39, 39 + 1/12}, "Violin"], 
+   SoundNote[{"E4", "G3", "Ab3", "C4"}, {39 + 1/6, 39 + 3/12}, "Violin"], 
+   SoundNote[{"E4", "G4", "Ab3", "C4"}, {39 + 2/6, 39 + 5/12}, "Violin"], 
+   SoundNote[{"E4", "G#3", "B3"}, {39.5, 40}, "Violin"](*m11*), 
+   SoundNote[{"F#4", "A#3"}, {40, 40.5}, "Violin"], 
+   SoundNote[{"F#4", "A#3"}, {41, 41.5}, "Violin"], 
+   SoundNote[{"F#4", "A#3"}, {41.5, 41.5 + 1/12}, "Violin"], 
+   SoundNote[{"F#4", "A#3"}, {41.5 + 1/6, 41.5 + 3/12}, "Violin"], 
+   SoundNote[{"F#4", "A#3"}, {41.5 + 2/6, 41.5 + 5/12}, "Violin"], 
+   SoundNote[{"F#4", "D#4"}, {42, 43}, "Violin"], 
+   SoundNote[{"F#4", "A#3"}, {43, 43.5}, "Violin"], 
+   SoundNote[{"F#4", "A#3"}, {43.5, 43.5 + 1/12}, "Violin"], 
+   SoundNote[{"F#4", "A#3"}, {43.5 + 1/6, 43.5 + 3/12}, "Violin"], 
+   SoundNote[{"F#4", "A#3"}, {43.5 + 2/6, 43.5 + 5/12}, "Violin"](*m12*), 
+   SoundNote[{"G4", "G3"}, {44, 44.5}, "Violin"], 
+   SoundNote[{"G4", "Bb3"}, {45, 45.5}, "Violin"], 
+   SoundNote[{"G4", "Bb3"}, {45.5, 45.5 + 1/12}, "Violin"], 
+   SoundNote[{"G4", "Bb3"}, {45.5 + 1/6, 45.5 + 3/12}, "Violin"], 
+   SoundNote[{"G4", "Bb3"}, {45.5 + 2/6, 45.5 + 5/12}, "Violin"], 
+   SoundNote[{"G4", "G3"}, {46, 46.5}, "Violin"], 
+   SoundNote[{"G4", "G3"}, {46.5, 46.5 + 1/12}, "Violin"], 
+   SoundNote[{"G4", "G3"}, {46.5 + 1/6, 46.5 + 3/12}, "Violin"], 
+   SoundNote[{"G4", "G3"}, {46.5 + 2/6, 46.5 + 5/12}, "Violin"], 
+   SoundNote[{"G4", "F#4", "G3"}, {47, 47 + 1/12}, "Violin"], 
+   SoundNote[{"G4", "F#4", "G3"}, {47 + 1/6, 47 + 3/12}, "Violin"], 
+   SoundNote[{"G4", "F#4", "G3"}, {47 + 2/6, 47 + 5/12}, "Violin"], 
+   SoundNote[{"G4", "G3"}, {47.5, 48}, "Violin"](*m13*)(***************************************),
+    SoundNote[{"G4", "G3", "Eb4", "Bb3"}, {48, 48.5}, "Violin"], 
+   SoundNote[{"G4", "G3"}, {49, 49.5}, "Violin"], 
+   SoundNote[{"G4", "G3"}, {49.5, 49.5 + 1/12}, "Violin"], 
+   SoundNote[{"G4", "G3"}, {49.5 + 1/6, 49.5 + 3/12}, "Violin"], 
+   SoundNote[{"G4", "G3"}, {49.5 + 2/6, 49.5 + 5/12}, "Violin"], 
+   SoundNote[{"G4", "G3"}, {50, 50.5}, "Violin"], 
+   SoundNote[{"G4", "G3"}, {50.5, 50.5 + 1/12}, "Violin"], 
+   SoundNote[{"G4", "G3"}, {50.5 + 1/6, 50.5 + 3/12}, "Violin"], 
+   SoundNote[{"G4", "G3"}, {50.5 + 2/6, 50.5 + 5/12}, "Violin"], 
+   SoundNote[{"G4", "F#4", "G3"}, {51, 51 + 1/12}, "Violin"], 
+   SoundNote[{"G4", "F#4", "G3"}, {51 + 1/6, 51 + 3/12}, "Violin"], 
+   SoundNote[{"G4", "F#4", "G3"}, {51 + 2/6, 51 + 5/12}, "Violin"], 
+   SoundNote[{"G4", "G3", "F4"}, {51.5, 52}, "Violin"](*m14*), 
+   SoundNote[{"G#4", "E4", "G#3"}, {52, 52.5}, "Violin"], 
+   SoundNote[{"G#4", "E4", "G#3"}, {53, 53.5}, "Violin"], 
+   SoundNote[{"G#4", "C#4", "G#3"}, {53.5, 53.5 + 1/12}, "Violin"], 
+   SoundNote[{"G#4", "C#4", "G#3"}, {53.5 + 1/6, 53.5 + 3/12}, "Violin"], 
+   SoundNote[{"G#4", "C#4", "G#3"}, {53.5 + 2/6, 53.5 + 5/12}, "Violin"], 
+   SoundNote[{"E4", "C#4", "G#3"}, {54, 54.5}, "Violin"], 
+   SoundNote[{"E4", "C#4", "G#3"}, {54.5, 54.5 + 1/12}, "Violin"], 
+   SoundNote[{"E4", "C#4", "G#3"}, {54.5 + 1/6, 54.5 + 3/12}, "Violin"], 
+   SoundNote[{"E4", "C#4", "G#3"}, {54.5 + 2/6, 54.5 + 5/12}, "Violin"], 
+   SoundNote[{"E4", "C#4", "G#3"}, {55, 55 + 1/12}, "Violin"], 
+   SoundNote[{"E4", "C#4", "G#3"}, {55 + 1/6, 55 + 3/12}, "Violin"], 
+   SoundNote[{"E4", "C#4", "G#3"}, {55 + 2/6, 55 + 5/12}, "Violin"], 
+   SoundNote[{"E4", "B3", "G#3"}, {55.5, 56}, "Violin"](*m15*), 
+   SoundNote[{"F#4", "A#3", "F#3"}, {56, 56.5}, "Violin"], 
+   SoundNote[{"F#4", "D#4", "F#3"}, {57, 57.5}, "Violin"], 
+   SoundNote[{"F#4", "D#4", "F#3"}, {57.5, 57.5 + 1/12}, "Violin"], 
+   SoundNote[{"F#4", "D#4", "F#3"}, {57.5 + 1/6, 57.5 + 3/12}, "Violin"], 
+   SoundNote[{"F#4", "D#4", "F#3"}, {57.5 + 2/6, 57.5 + 5/12}, "Violin"], 
+   SoundNote[{"F#4", "D#4", "F#3"}, {58, 58.5}, "Violin"], 
+   SoundNote[{"F#4", "D#4", "F#3"}, {58.5, 58.5 + 1/12}, "Violin"], 
+   SoundNote[{"F#4", "D#4", "F#3"}, {58.5 + 1/6, 58.5 + 3/12}, "Violin"], 
+   SoundNote[{"F#4", "D#4", "F#3"}, {58.5 + 2/6, 58.5 + 5/12}, "Violin"], 
+   SoundNote[{"Eb4", "Bb3", "F#3"}, {59, 59 + 1/12}, "Violin"], 
+   SoundNote[{"Eb4", "Bb3", "F#3"}, {59 + 1/6, 59 + 3/12}, "Violin"], 
+   SoundNote[{"Eb4", "Bb3", "F#3"}, {59 + 2/6, 59 + 5/12}, "Violin"], 
+   SoundNote[{"Eb4", "Bb3", "F#3"}, {59.5, 60}, "Violin"](*m16*), 
+   SoundNote[{"G4", "G3", "G3"}, {60, 60.5}, "Violin"], 
+   SoundNote[{"F#4", "Bb3"}, {61, 61.5}, "Violin"], 
+   SoundNote[{"F#4", "Bb3"}, {61.5, 61.5 + 1/12}, "Violin"], 
+   SoundNote[{"F#4", "Bb3"}, {61.5 + 1/6, 61.5 + 3/12}, "Violin"], 
+   SoundNote[{"F#4", "Bb3"}, {61.5 + 2/6, 61.5 + 5/12}, "Violin"], 
+   SoundNote[{"G4", "G3"}, {62, 62.5}, "Violin"], 
+   SoundNote[{"G4", "G3"}, {62.5, 62.5 + 1/12}, "Violin"], 
+   SoundNote[{"G4", "G3"}, {62.5 + 1/6, 62.5 + 3/12}, "Violin"], 
+   SoundNote[{"G4", "G3"}, {62.5 + 2/6, 62.5 + 5/12}, "Violin"], 
+   SoundNote[{"G4", "G3"}, {63, 63 + 1/12}, "Violin"], 
+   SoundNote[{"G4", "G3"}, {63 + 1/6, 63 + 3/12}, "Violin"], 
+   SoundNote[{"G4", "G3"}, {63 + 2/6, 63 + 5/12}, "Violin"], 
+   SoundNote[{"G4", "G3"}, {63.5, 64}, "Violin"],
+   (*timpani part*)
+   (**********************************************************************)
+   SoundNote["G2", {0, .5}, "Timpani"], SoundNote["G2", {1, 1.5}, "Timpani"], 
+   SoundNote["G2", {1.5, 1.5 + 1/6}, "Timpani"], 
+   SoundNote["G2", {1.5 + 1/6, 1.5 + 2/6}, "Timpani"], 
+   SoundNote["G2", {1.5 + 2/6, 2}, "Timpani"], 
+   SoundNote["G2", {2, 2.5}, "Timpani"], 
+   SoundNote["G2", {2.5, 2.5 + 1/6}, "Timpani"], 
+   SoundNote["G2", {2.5 + 1/6, 2.5 + 2/6}, "Timpani"], 
+   SoundNote["G2", {2.5 + 2/6, 3}, "Timpani"], 
+   SoundNote["Eb2", {3, 3 + 1/6}, "Timpani"], 
+   SoundNote["Eb2", {3 + 1/6, 3 + 2/6}, "Timpani"], 
+   SoundNote["Eb2", {3 + 2/6, 3.5}, "Timpani"], 
+   SoundNote["Eb2", {3.5, 4}, "Timpani"](*m2*), 
+   SoundNote["G2", {4, 4.5}, "Timpani"], SoundNote["G2", {5, 5.5}, "Timpani"],
+    SoundNote["G2", {5.5, 5.5 + 1/6}, "Timpani"], 
+   SoundNote["G2", {5.5 + 1/6, 5.5 + 2/6}, "Timpani"], 
+   SoundNote["G2", {5.5 + 2/6, 6}, "Timpani"], 
+   SoundNote["G2", {6, 6.5}, "Timpani"], 
+   SoundNote["G2", {6.5, 6.5 + 1/6}, "Timpani"], 
+   SoundNote["G2", {6.5 + 1/6, 6.5 + 2/6}, "Timpani"], 
+   SoundNote["G2", {6.5 + 2/6, 7}, "Timpani"], 
+   SoundNote["Eb2", {7, 7 + 1/6}, "Timpani"], 
+   SoundNote["Eb2", {7 + 1/6, 7 + 2/6}, "Timpani"], 
+   SoundNote["Eb2", {7 + 2/6, 7.5}, "Timpani"], 
+   SoundNote["Eb2", {7.5, 8}, "Timpani"](**), 
+   SoundNote["G2", {8, 8.5}, "Timpani"], SoundNote["G2", {9, 9.5}, "Timpani"],
+    SoundNote["G2", {9.5, 9.5 + 1/6}, "Timpani"], 
+   SoundNote["G2", {9.5 + 1/6, 9.5 + 2/6}, "Timpani"], 
+   SoundNote["G2", {9.5 + 2/6, 10}, "Timpani"], 
+   SoundNote["G2", {10, 10.5}, "Timpani"], 
+   SoundNote["G2", {10.5, 10.5 + 1/6}, "Timpani"], 
+   SoundNote["G2", {10.5 + 1/6, 10.5 + 2/6}, "Timpani"], 
+   SoundNote["G2", {10.5 + 2/6, 11}, "Timpani"], 
+   SoundNote["G2", {11, 11 + 1/6}, "Timpani"], 
+   SoundNote["G2", {11 + 1/6, 11 + 2/6}, "Timpani"], 
+   SoundNote["G2", {11 + 2/6, 11.5}, "Timpani"], 
+   SoundNote["G2", {11.5, 12}, "Timpani"](**), 
+   SoundNote["G2", {12, 12.5}, "Timpani"], 
+   SoundNote["G2", {13, 13.5}, "Timpani"], 
+   SoundNote["G2", {13.5, 13.5 + 1/6}, "Timpani"], 
+   SoundNote["G2", {13.5 + 1/6, 13.5 + 2/6}, "Timpani"], 
+   SoundNote["G2", {13.5 + 2/6, 14}, "Timpani"], 
+   SoundNote["G2", {14, 14.5}, "Timpani"], 
+   SoundNote["G2", {14.5, 14.5 + 1/6}, "Timpani"], 
+   SoundNote["G2", {14.5 + 1/6, 14.5 + 2/6}, "Timpani"], 
+   SoundNote["G2", {14.5 + 2/6, 15}, "Timpani"], 
+   SoundNote["G2", {15, 15 + 1/6}, "Timpani"], 
+   SoundNote["G2", {15 + 1/6, 15 + 2/6}, "Timpani"], 
+   SoundNote["G2", {15 + 2/6, 15.5}, "Timpani"], 
+   SoundNote["G2", {15.5, 16}, "Timpani"](**), 
+   SoundNote["G2", {16, 16.5}, "Timpani"], 
+   SoundNote["G2", {17, 17.5}, "Timpani"], 
+   SoundNote["G2", {17.5, 17.5 + 1/6}, "Timpani"], 
+   SoundNote["G2", {17.5 + 1/6, 17.5 + 2/6}, "Timpani"], 
+   SoundNote["G2", {17.5 + 2/6, 18}, "Timpani"], 
+   SoundNote["G2", {18, 18.5}, "Timpani"], 
+   SoundNote["G2", {18.5, 18.5 + 1/6}, "Timpani"], 
+   SoundNote["G2", {18.5 + 1/6, 18.5 + 2/6}, "Timpani"], 
+   SoundNote["G2", {18.5 + 2/6, 19}, "Timpani"], 
+   SoundNote["G2", {19, 19 + 1/6}, "Timpani"], 
+   SoundNote["G2", {19 + 1/6, 19 + 2/6}, "Timpani"], 
+   SoundNote["G2", {19 + 2/6, 19.5}, "Timpani"], 
+   SoundNote["G2", {19.5, 20}, "Timpani"](**), 
+   SoundNote["G2", {20, 20.5}, "Timpani"], 
+   SoundNote["G2", {21, 21.5}, "Timpani"], 
+   SoundNote["G2", {21.5, 21.5 + 1/6}, "Timpani"], 
+   SoundNote["G2", {21.5 + 1/6, 21.5 + 2/6}, "Timpani"], 
+   SoundNote["G2", {21.5 + 2/6, 22}, "Timpani"], 
+   SoundNote["G2", {22, 22.5}, "Timpani"], 
+   SoundNote["G2", {22.5, 22.5 + 1/6}, "Timpani"], 
+   SoundNote["G2", {22.5 + 1/6, 22.5 + 2/6}, "Timpani"], 
+   SoundNote["G2", {22.5 + 2/6, 23}, "Timpani"], 
+   SoundNote["G2", {23, 23 + 1/6}, "Timpani"], 
+   SoundNote["G2", {23 + 1/6, 23 + 2/6}, "Timpani"], 
+   SoundNote["G2", {23 + 2/6, 23.5}, "Timpani"], 
+   SoundNote["G2", {23.5, 24}, "Timpani"](**), 
+   SoundNote["G2", {24, 24.5}, "Timpani"], 
+   SoundNote["G2", {25, 25.5}, "Timpani"], 
+   SoundNote["G2", {25.5, 25.5 + 1/6}, "Timpani"], 
+   SoundNote["G2", {25.5 + 1/6, 25.5 + 2/6}, "Timpani"], 
+   SoundNote["G2", {25.5 + 2/6, 26}, "Timpani"], 
+   SoundNote["G2", {26, 26.5}, "Timpani"], 
+   SoundNote["G2", {26.5, 26.5 + 1/6}, "Timpani"], 
+   SoundNote["G2", {26.5 + 1/6, 26.5 + 2/6}, "Timpani"], 
+   SoundNote["G2", {26.5 + 2/6, 27}, "Timpani"], 
+   SoundNote["G2", {27, 27 + 1/6}, "Timpani"], 
+   SoundNote["G2", {27 + 1/6, 27 + 2/6}, "Timpani"], 
+   SoundNote["G2", {27 + 2/6, 27.5}, "Timpani"], 
+   SoundNote["G2", {27.5, 28}, "Timpani"](**), 
+   SoundNote["Eb2", {28, 29}, "Timpani"], 
+   SoundNote["C3", {29, 30}, "Timpani"], 
+   SoundNote["G2", {30, 30.5}, "Timpani"], 
+   SoundNote["G2", {30.5, 30.5 + 1/6}, "Timpani"], 
+   SoundNote["G2", {30.5 + 1/6, 30.5 + 2/6}, "Timpani"], 
+   SoundNote["G2", {30.5 + 2/6, 31}, "Timpani"], 
+   SoundNote["G2", {31, 31 + 1/6}, "Timpani"], 
+   SoundNote["G2", {31 + 1/6, 31 + 2/6}, "Timpani"], 
+   SoundNote["G2", {31 + 2/6, 31.5}, "Timpani"], 
+   SoundNote["G2", {31.5, 32}, "Timpani"](**), 
+   SoundNote["G2", {32, 32.5}, "Timpani"], 
+   SoundNote["G2", {33, 33.5}, "Timpani"], 
+   SoundNote["G2", {33.5, 33.5 + 1/6}, "Timpani"], 
+   SoundNote["G2", {33.5 + 1/6, 33.5 + 2/6}, "Timpani"], 
+   SoundNote["G2", {33.5 + 2/6, 34}, "Timpani"], 
+   SoundNote["G2", {34, 34.5}, "Timpani"], 
+   SoundNote["G2", {34.5, 34.5 + 1/6}, "Timpani"], 
+   SoundNote["G2", {34.5 + 1/6, 34.5 + 2/6}, "Timpani"], 
+   SoundNote["G2", {34.5 + 2/6, 35}, "Timpani"], 
+   SoundNote["G2", {35, 35 + 1/6}, "Timpani"], 
+   SoundNote["G2", {35 + 1/6, 35 + 2/6}, "Timpani"], 
+   SoundNote["G2", {35 + 2/6, 35.5}, "Timpani"], 
+   SoundNote["G2", {35.5, 36}, "Timpani"](**), 
+   SoundNote["C#3", {36, 37}, "Timpani"], 
+   SoundNote["G2", {44, 45}, "Timpani"], 
+   SoundNote["G2", {46, 46.5}, "Timpani"], 
+   SoundNote["G2", {46.5, 46.5 + 1/6}, "Timpani"], 
+   SoundNote["G2", {46.5 + 1/6, 46.5 + 2/6}, "Timpani"], 
+   SoundNote["G2", {46.5 + 2/6, 47}, "Timpani"], 
+   SoundNote["G2", {47, 47 + 1/6}, "Timpani"], 
+   SoundNote["G2", {47 + 1/6, 47 + 2/6}, "Timpani"], 
+   SoundNote["G2", {47 + 2/6, 47.5}, "Timpani"], 
+   SoundNote["G2", {47.5, 48}, "Timpani"], 
+   SoundNote["Eb2", {48, 49}, "Timpani"], 
+   SoundNote["G2", {50, 51}, "Timpani"], 
+   SoundNote["C#3", {52, 53}, "Timpani"], 
+   SoundNote["C3", {59, 60}, "Timpani"], SoundNote["G2", {60, 61}, "Timpani"],
+    SoundNote["C3", {61, 62}, "Timpani"], 
+   SoundNote["G2", {62, 63}, "Timpani"], 
+   SoundNote["G2", {63, 63 + 1/6}, "Timpani"], 
+   SoundNote["G2", {63 + 1/6, 63 + 2/6}, "Timpani"], 
+   SoundNote["G2", {63 + 2/6, 63.5}, "Timpani"], 
+   SoundNote["G2", {63.5, 64}, "Timpani"]};
+
+StarWarsUnpitchedInstruments = {(*snare drum*)SoundNote["Snare", {0, .5}], 
+   SoundNote["Snare", {1, 1.5}], SoundNote["Snare", {1.5, 1.5 + 1/6}], 
+   SoundNote["Snare", {1.5 + 1/6, 1.5 + 2/6}], 
+   SoundNote["Snare", {1.5 + 2/6, 2}], SoundNote["Snare", {2, 2.5}], 
+   SoundNote["Snare", {2.5, 2.5 + 1/6}], 
+   SoundNote["Snare", {2.5 + 1/6, 2.5 + 2/6}], 
+   SoundNote["Snare", {2.5 + 2/6, 3}], SoundNote["Snare", {3, 3 + 1/6}], 
+   SoundNote["Snare", {3 + 1/6, 3 + 2/6}], SoundNote["Snare", {3 + 2/6, 3.5}],
+    SoundNote["Snare", {3.5, 4}](*m2*), SoundNote["Snare", {4, 4.5}], 
+   SoundNote["Snare", {5, 5.5}], SoundNote["Snare", {5.5, 5.5 + 1/6}], 
+   SoundNote["Snare", {5.5 + 1/6, 5.5 + 2/6}], 
+   SoundNote["Snare", {5.5 + 2/6, 6}], SoundNote["Snare", {6, 6.5}], 
+   SoundNote["Snare", {6.5, 6.5 + 1/6}], 
+   SoundNote["Snare", {6.5 + 1/6, 6.5 + 2/6}], 
+   SoundNote["Snare", {6.5 + 2/6, 7}], SoundNote["Snare", {7, 7 + 1/6}], 
+   SoundNote["Snare", {7 + 1/6, 7 + 2/6}], SoundNote["Snare", {7 + 2/6, 7.5}],
+    SoundNote["Snare", {7.5, 8}](**), SoundNote["Snare", {8, 8.5}], 
+   SoundNote["Snare", {9, 9.5}], SoundNote["Snare", {9.5, 9.5 + 1/6}], 
+   SoundNote["Snare", {9.5 + 1/6, 9.5 + 2/6}], 
+   SoundNote["Snare", {9.5 + 2/6, 10}], SoundNote["Snare", {10, 10.5}], 
+   SoundNote["Snare", {10.5, 10.5 + 1/6}], 
+   SoundNote["Snare", {10.5 + 1/6, 10.5 + 2/6}], 
+   SoundNote["Snare", {10.5 + 2/6, 11}], SoundNote["Snare", {11, 11 + 1/6}], 
+   SoundNote["Snare", {11 + 1/6, 11 + 2/6}], 
+   SoundNote["Snare", {11 + 2/6, 11.5}], SoundNote["Snare", {11.5, 12}](**), 
+   SoundNote["Snare", {12, 12.5}], SoundNote["Snare", {13, 13.5}], 
+   SoundNote["Snare", {13.5, 13.5 + 1/6}], 
+   SoundNote["Snare", {13.5 + 1/6, 13.5 + 2/6}], 
+   SoundNote["Snare", {13.5 + 2/6, 14}], SoundNote["Snare", {14, 14.5}], 
+   SoundNote["Snare", {14.5, 14.5 + 1/6}], 
+   SoundNote["Snare", {14.5 + 1/6, 14.5 + 2/6}], 
+   SoundNote["Snare", {14.5 + 2/6, 15}], SoundNote["Snare", {15, 15 + 1/6}], 
+   SoundNote["Snare", {15 + 1/6, 15 + 2/6}], 
+   SoundNote["Snare", {15 + 2/6, 15.5}], SoundNote["Snare", {15.5, 16}](**), 
+   SoundNote["Snare", {16, 16.5}], SoundNote["Snare", {17, 17.5}], 
+   SoundNote["Snare", {17.5, 17.5 + 1/6}], 
+   SoundNote["Snare", {17.5 + 1/6, 17.5 + 2/6}], 
+   SoundNote["Snare", {17.5 + 2/6, 18}], SoundNote["Snare", {18, 18.5}], 
+   SoundNote["Snare", {18.5, 18.5 + 1/6}], 
+   SoundNote["Snare", {18.5 + 1/6, 18.5 + 2/6}], 
+   SoundNote["Snare", {18.5 + 2/6, 19}], SoundNote["Snare", {19, 19 + 1/6}], 
+   SoundNote["Snare", {19 + 1/6, 19 + 2/6}], 
+   SoundNote["Snare", {19 + 2/6, 19.5}], SoundNote["Snare", {19.5, 20}](**), 
+   SoundNote["Snare", {20, 20.5}], SoundNote["Snare", {21, 21.5}], 
+   SoundNote["Snare", {21.5, 21.5 + 1/6}], 
+   SoundNote["Snare", {21.5 + 1/6, 21.5 + 2/6}], 
+   SoundNote["Snare", {21.5 + 2/6, 22}], SoundNote["Snare", {22, 22.5}], 
+   SoundNote["Snare", {22.5, 22.5 + 1/6}], 
+   SoundNote["Snare", {22.5 + 1/6, 22.5 + 2/6}], 
+   SoundNote["Snare", {22.5 + 2/6, 23}], SoundNote["Snare", {23, 23 + 1/6}], 
+   SoundNote["Snare", {23 + 1/6, 23 + 2/6}], 
+   SoundNote["Snare", {23 + 2/6, 23.5}], SoundNote["Snare", {23.5, 24}](**), 
+   SoundNote["Snare", {24, 24.5}], SoundNote["Snare", {25, 25.5}], 
+   SoundNote["Snare", {25.5, 25.5 + 1/6}], 
+   SoundNote["Snare", {25.5 + 1/6, 25.5 + 2/6}], 
+   SoundNote["Snare", {25.5 + 2/6, 26}], SoundNote["Snare", {26, 26.5}], 
+   SoundNote["Snare", {26.5, 26.5 + 1/6}], 
+   SoundNote["Snare", {26.5 + 1/6, 26.5 + 2/6}], 
+   SoundNote["Snare", {26.5 + 2/6, 27}], SoundNote["Snare", {27, 27 + 1/6}], 
+   SoundNote["Snare", {27 + 1/6, 27 + 2/6}], 
+   SoundNote["Snare", {27 + 2/6, 27.5}], SoundNote["Snare", {27.5, 28}](**), 
+   SoundNote["Snare", {28, 29}], SoundNote["Snare", {29, 29.5}], 
+   SoundNote["Snare", {29.5, 29.5 + 1/6}], 
+   SoundNote["Snare", {29.5 + 1/6, 29.5 + 2/6}], 
+   SoundNote["Snare", {29.5 + 2/6, 30}], SoundNote["Snare", {30, 30.5}], 
+   SoundNote["Snare", {30.5, 30.5 + 1/6}], 
+   SoundNote["Snare", {30.5 + 1/6, 30.5 + 2/6}], 
+   SoundNote["Snare", {30.5 + 2/6, 31}], SoundNote["Snare", {31, 31 + 1/6}], 
+   SoundNote["Snare", {31 + 1/6, 31 + 2/6}], 
+   SoundNote["Snare", {31 + 2/6, 31.5}], SoundNote["Snare", {31.5, 32}](**), 
+   SoundNote["Snare", {32, 32.5}], SoundNote["Snare", {33, 33.5}], 
+   SoundNote["Snare", {33.5, 33.5 + 1/6}], 
+   SoundNote["Snare", {33.5 + 1/6, 33.5 + 2/6}], 
+   SoundNote["Snare", {33.5 + 2/6, 34}], SoundNote["Snare", {34, 34.5}], 
+   SoundNote["Snare", {34.5, 34.5 + 1/6}], 
+   SoundNote["Snare", {34.5 + 1/6, 34.5 + 2/6}], 
+   SoundNote["Snare", {34.5 + 2/6, 35}], SoundNote["Snare", {35, 35 + 1/6}], 
+   SoundNote["Snare", {35 + 1/6, 35 + 2/6}], 
+   SoundNote["Snare", {35 + 2/6, 35.5}], SoundNote["Snare", {35.5, 36}](**),(**************************************)
+   SoundNote["Snare", {36, 36.5}], SoundNote["Snare", {37, 37.5}], 
+   SoundNote["Snare", {37.5, 37.5 + 1/6}], 
+   SoundNote["Snare", {37.5 + 1/6, 37.5 + 2/6}], 
+   SoundNote["Snare", {37.5 + 2/6, 38}], SoundNote["Snare", {38, 38.5}], 
+   SoundNote["Snare", {38.5, 38.5 + 1/6}], 
+   SoundNote["Snare", {38.5 + 1/6, 38.5 + 2/6}], 
+   SoundNote["Snare", {38.5 + 2/6, 39}], SoundNote["Snare", {39, 39 + 1/6}], 
+   SoundNote["Snare", {39 + 1/6, 39 + 2/6}], 
+   SoundNote["Snare", {39 + 2/6, 39.5}], SoundNote["Snare", {39.5, 40}](**),(**)
+   SoundNote["Snare", {40, 40.5}], SoundNote["Snare", {41, 41.5}], 
+   SoundNote["Snare", {41.5, 41.5 + 1/6}], 
+   SoundNote["Snare", {41.5 + 1/6, 41.5 + 2/6}], 
+   SoundNote["Snare", {41.5 + 2/6, 42}], SoundNote["Snare", {42, 43}], 
+   SoundNote["Snare", {43, 43.5}], SoundNote["Snare", {43.5, 43.5 + 1/6}], 
+   SoundNote["Snare", {43.5 + 1/6, 43.5 + 2/6}], 
+   SoundNote["Snare", {43.5 + 2/6, 44}](**),(*************************)(**)
+   SoundNote["Snare", {44, 44.5}], SoundNote["Snare", {45, 45.5}], 
+   SoundNote["Snare", {45.5, 45.5 + 1/6}], 
+   SoundNote["Snare", {45.5 + 1/6, 45.5 + 2/6}], 
+   SoundNote["Snare", {45.5 + 2/6, 46}], SoundNote["Snare", {46, 46.5}], 
+   SoundNote["Snare", {46.5, 46.5 + 1/6}], 
+   SoundNote["Snare", {46.5 + 1/6, 46.5 + 2/6}], 
+   SoundNote["Snare", {46.5 + 2/6, 47}], SoundNote["Snare", {47, 47 + 1/6}], 
+   SoundNote["Snare", {47 + 1/6, 47 + 2/6}], 
+   SoundNote["Snare", {47 + 2/6, 47.5}], SoundNote["Snare", {47.5, 48}](**), 
+   SoundNote["Snare", {48, 48.5}], SoundNote["Snare", {49, 49.5}], 
+   SoundNote["Snare", {49.5, 49.5 + 1/6}], 
+   SoundNote["Snare", {49.5 + 1/6, 49.5 + 2/6}], 
+   SoundNote["Snare", {49.5 + 2/6, 50}], SoundNote["Snare", {50, 50.5}], 
+   SoundNote["Snare", {50.5, 50.5 + 1/6}], 
+   SoundNote["Snare", {50.5 + 1/6, 50.5 + 2/6}], 
+   SoundNote["Snare", {50.5 + 2/6, 51}], SoundNote["Snare", {51, 51 + 1/6}], 
+   SoundNote["Snare", {51 + 1/6, 51 + 2/6}], 
+   SoundNote["Snare", {51 + 2/6, 51.5}], SoundNote["Snare", {51.5, 52}](**), 
+   SoundNote["Snare", {52, 52.5}], SoundNote["Snare", {53, 53.5}], 
+   SoundNote["Snare", {53.5, 53.5 + 1/6}], 
+   SoundNote["Snare", {53.5 + 1/6, 53.5 + 2/6}], 
+   SoundNote["Snare", {53.5 + 2/6, 54}], SoundNote["Snare", {54, 54.5}], 
+   SoundNote["Snare", {54.5, 54.5 + 1/6}], 
+   SoundNote["Snare", {54.5 + 1/6, 54.5 + 2/6}], 
+   SoundNote["Snare", {54.5 + 2/6, 55}], SoundNote["Snare", {55, 55 + 1/6}], 
+   SoundNote["Snare", {55 + 1/6, 55 + 2/6}], 
+   SoundNote["Snare", {55 + 2/6, 55.5}], SoundNote["Snare", {55.5, 56}](**), 
+   SoundNote["Snare", {56, 56.5}], SoundNote["Snare", {57, 57.5}], 
+   SoundNote["Snare", {57.5, 57.5 + 1/6}], 
+   SoundNote["Snare", {57.5 + 1/6, 57.5 + 2/6}], 
+   SoundNote["Snare", {57.5 + 2/6, 58}], SoundNote["Snare", {58, 58.5}], 
+   SoundNote["Snare", {58.5, 58.5 + 1/6}], 
+   SoundNote["Snare", {58.5 + 1/6, 58.5 + 2/6}], 
+   SoundNote["Snare", {58.5 + 2/6, 59}], SoundNote["Snare", {59, 59 + 1/6}], 
+   SoundNote["Snare", {59 + 1/6, 59 + 2/6}], 
+   SoundNote["Snare", {59 + 2/6, 59.5}], SoundNote["Snare", {59.5, 60}](**), 
+   SoundNote["Snare", {60, 60.5}], SoundNote["Snare", {61, 61.5}], 
+   SoundNote["Snare", {61.5, 61.5 + 1/6}], 
+   SoundNote["Snare", {61.5 + 1/6, 61.5 + 2/6}], 
+   SoundNote["Snare", {61.5 + 2/6, 62}], SoundNote["Snare", {62, 62.5}], 
+   SoundNote["Snare", {62.5, 62.5 + 1/6}], 
+   SoundNote["Snare", {62.5 + 1/6, 62.5 + 2/6}], 
+   SoundNote["Snare", {62.5 + 2/6, 63}], SoundNote["Snare", {63, 63 + 1/6}], 
+   SoundNote["Snare", {63 + 1/6, 63 + 2/6}], 
+   SoundNote["Snare", {63 + 2/6, 63.5}], SoundNote["Snare", {63.5, 64}](**)
+   (**************************triangle*******************************), 
+   SoundNote["OpenTriangle", {32, 33}], SoundNote["OpenTriangle", {48, 49}], 
+   SoundNote["OpenTriangle", {52, 53}], SoundNote["OpenTriangle", {56, 57}], 
+   SoundNote["OpenTriangle", {60, 62}], SoundNote["OpenTriangle", {62, 63}], 
+   SoundNote["OpenTriangle", {63, 64}],(******* crash cymbal **********)
+   SoundNote["CrashCymbal2", {3, 4}], SoundNote["CrashCymbal2", {7, 8}], 
+   SoundNote["CrashCymbal2", {11, 12}], 
+   SoundNote["CrashCymbal2", {15, 16}](****************** bass drum *************************),
+    SoundNote["BassDrum", {3.5, 4}], SoundNote["BassDrum", {7.5, 8}], 
+   SoundNote["BassDrum", {11.5, 12}], SoundNote["BassDrum", {15.5, 16}]};
+
+Conclusion:
+There are a bunch of different ways to code music using Mathematica.  There is still a lot more to learn about the SoundNote function, the fourth parameter deals with audio processing, which deals with a completely new way to code music.  There are a lot of different options when it comes to audio processing so that you'll be able to code a piece of music and have it sound exactly the way you want it.  H
+
+The portion I coded is basically an introduction to coding music in Mathematica and the modules I made only check one specific way of coding music.  If i wanted to be able to check all the types I've listed in this notebook, I would be able to code it using similar modules.  However, just like the four-parameter SoundNote function, there are more intricate ways to write music in Mathematica such that there would need to be different algorithms to check the correctness of said code.  
+
+I had a really fun time with this project, as it allowed me to combine both of my majors in a unique and somewhat abstract way.  I would love to focus more on this type of project in the future if I am given the opportunity to do so.  
+
+
+Sources: 
+Sound\[LongDash]Wolfram Language Documentation, reference.wolfram.com/language/ref/Sound.html?q=Sound.
+SoundNote\[LongDash]Wolfram Language Documentation, reference.wolfram.com/language/ref/SoundNote.html
+Mangano, Sal. Mathematica Cookbook. O'Reilly, 2011.
+Williams, John.  III. The Imperial March (Darth Vader's Theme). April 29, 1980, Warner-Tamerlane Publishing Corp, 1980. Print.
