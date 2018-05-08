@@ -1,3 +1,5 @@
+(*sorts a given list using the Bubble Sort method*)
+
 BubbleSort[A_] :=
   Module[{PassCounter, a, b, c, d, debug = True, NewList, NewList2},
    
