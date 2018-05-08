@@ -1,0 +1,85 @@
+(*Calculates the power set of a given set*)
+
+MyRecursiveSubsets[AA_] :=
+  Module[{
+    (*Listing all variables*)
+    BB,
+    CC,
+    DD,
+    Yes,
+    Counter,
+    
+    DebugFlag = False  (*Going to make a debug program*)
+    		},
+   (*CC={AA};*)
+   
+   If [DebugFlag == True,
+    Print["Entered MyRecursiveSubsets with the set "];
+    Print[AA];
+    ];
+   (******************************************************)
+   (*Above is a Debug program so the user can see all the processs \
+the computer makes*)
+   (******************************************************)
+   If[Length[AA] == 0, Return[{{}}]];
+   
+   If[Length[AA] > 0,
+    
+    	Yes = Part[AA, Length[AA]];
+    
+    (*Assigning the Variable that is going to be dropped to a \
+variable*)
+    (*Begin part "Yes" Debug*)
+    If [DebugFlag == True,
+     Print["The element removed from the set is "];
+     Print[Yes];
+     ];
+    (*End part "Yes" debug*)
+    
+    	BB = Drop[AA, {Length[AA]}];
+    
+    (*Assigning a variable for the original set without its last \
+element*)
+    (*Begin part "BB" debug*)
+    If [DebugFlag == True,
+     Print["The new set is now "];
+     Print[BB];
+     ];
+    (*End part "BB" debug*)
+    
+    	(*Drop[AA,{Length[AA]}];*)
+    
+    (*Dropping last element of original set*)
+    
+    	CC = MyRecursiveSubsets[BB];
+    
+    (*Recursive Statement*)
+    (*Begin debug for "CC"*)
+    If [DebugFlag == True,
+     Print["CC is now "];
+     Print[CC];
+     ];
+    (*End debug for "CC"*)
+    Counter = 1;
+    DD = {};
+    (*Begin While loop*)
+    While [Counter <= Length[CC],
+     DD = Append[DD, Append[Part[CC, Counter], Yes]];
+     Counter = Counter + 1;
+     	];
+    (*End While loop*)
+    
+    (*This Appends the dropped element of original set to the \
+powerset of BB*)
+    	If [DebugFlag == True,
+     	Print["DD is now "];
+     	Print[DD];
+     ];
+    (*End debug for "DD"*)
+    ]; 
+   (********************************************)
+   (*End Recursive statement *)
+   (********************************************)
+   Return[Union[CC, DD]]
+   ];
+(*End module*)
