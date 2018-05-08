@@ -1,0 +1,68 @@
+(*recursively finds how many partitions are made of a set S(n,r)*)
+(*iteratively finds how many partitions are made of a set S(n,r)*)
+(*also known as stirling numbers of the second kind*)
+
+
+
+(*recursive*)
+S[n_, 1] = 1;
+S[n_, n_] = 1;
+S[n_, r_] := S[n - 1, r - 1] + r S[n - 1, r];
+
+
+
+
+(*iterative*)
+MyIterativeStirling[n_, r_] := 
+  Module[
+   {
+    Counter,
+    NewList,
+    i,
+    OldList,
+    Debug = False
+    
+    },
+   
+   NewList = ConstantArray[1, n];
+   (*Begin debug*)
+   If [ Debug == True,
+    Print["This is what is assigned to n"];
+    Print[n];
+    Print["This is what is assigned to r"];
+    Print[r];
+    Print["Constructing a list with n elements, it is"];
+    Print[NewList];
+    ];
+   (*dont need base cases, the loop cover everything*)
+   (*Establish OldList as NewList so computer can assigned new \
+elements to a list*)
+   OldList = NewList;
+   
+   (*Need to create 2 loops, 
+   one for the counter and another to change the elements in the list*)
+\
+
+   
+   
+   For[ Counter = 2, Counter < n, Counter++,
+    (*Need to reassign oldlist with newlist to go through the next \
+loop correctly*)
+    OldList = NewList;
+    
+    For [ i = 2, i <= Counter, i++,
+     (*This reassigns each part of the list to new list*)
+     Part[NewList, i] = Part[OldList, i - 1] + i Part[OldList, i];
+     
+     (************)
+     If [ Debug == True,
+      Print["This is OldList"];
+      Print[OldList];
+      Print["This is NewList"];
+      Print[NewList];
+      ];     (*end debug*)
+     ]; (*end first for loop*)
+    ];(*end 2nd for loop*)
+   
+   Return[Part[NewList, r]];
+   ];
