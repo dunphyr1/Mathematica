@@ -1,3 +1,5 @@
+(*a minimum spanning tree algorithm*)
+
 Kruskal[verts_, edges_] := 
   Module[{elist, elist2, debug = False, a, b, c, d, e, f, g, sort, 
     currente, cost, currente2, currente3, vaccountedfor, vused, 
