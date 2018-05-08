@@ -1,3 +1,9 @@
+(*a project that gives some background on sound and music*)
+(*it contains written explanations on how to write music in Mathematica*)
+(*then has 3 methods  to debug music code created using specific parameters*)
+(*then contains my own example of music*)
+
+
 Writing Music in Mathematica
 Introduction:
 There is a lot of mathematics behind the core structure of anything and everything related to music.  This Mathematica notebook will give the reader a better understanding of music and how to compose it using Built-in Mathematica Functions
@@ -416,6 +422,11 @@ It is also very important to point out that t only the pitched instruments will 
 
 I will only have a list of SoundNote functions be inputted into any given list.  At the end of the penultimate module, it will create the music by putting the lists into the built-in Sound function.
 
+
+
+
+
+
 ConvertMusicNotes[NoteList_] :=
   Module[{debug = True, check, a, b, c, d, e, NewList},
    
@@ -557,6 +568,11 @@ number"];
    Return[NewList];
    ];(*end module*)
 
+
+
+
+
+
 The following portion will be dedicated to tested the Module above.
 
 
@@ -602,6 +618,11 @@ separate module*)
 Now that we have created a module that converts all the Music note strings to integers, we must do the same with the instruments.  All pitched instruments have an assigned integer value, so we can do a very similar method the ConvertMusicNotes uses.
 
 However, since Non-pitched instruments do not have corresponding integer values built-in, this program will simply check to make sure the string, in each SoundNote file, is a valid instrument according to the Percussion list above.
+
+
+
+
+
 
 ConvertInstruments[InstrumentList_] :=
   Module[{debug = True, NewList, check, a, b, c, d, counter},
@@ -754,6 +775,10 @@ is on"];
    (*returns an updated list*)
    Return[NewList];
    ];(*end module*)
+
+
+
+
 
 
 The following portion will be dedicated to testing the above Module.
@@ -1211,6 +1236,11 @@ desired tempo"];
    
    Print[Sound[NoteList, Tempo]];
    ];(*end module*)
+(********************************************************)
+(********end of code************************************)
+(********************************************************)
+
+
 
 
 Music[{SoundNote["G", {0, 2}, "Piano"]}, {SoundNote["Snare", {0, 2}]}, 1]
