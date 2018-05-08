@@ -1,0 +1,41 @@
+(*calculates values for factorials 2 different ways*)
+(*recursive*)
+(*iterative*)
+
+
+
+
+(*recursive*)
+MyFact[0] := 1;
+MyFact[p_] := p *  MyFact[p - 1];
+
+
+
+
+(*iterative*)
+MyBetterFact[p_] := 
+ 	Module[
+  	{PrevProduct,
+   	NewProduct,
+   	Counter
+   }, 
+  (* End the list of variables I am making *)
+  (* Starting algorithm *) 
+  PrevProduct = 1;
+  NewProduct = 1;
+  If [p > 1,
+   Counter = 2;
+   While[Counter <=  p,
+    NewProduct = Counter*PrevProduct;
+    PrevProduct = NewProduct;
+    (* Will reiterate until counter equals p+1 and will stop the loop \
+*)
+    Counter = Counter + 1;
+    ]
+   (*End of While Loop *)
+   ]; 
+  (*End if statement *)
+  Return[NewProduct]
+  (* Will return p factorial *)
+  ]
+(* Ends Module *)
