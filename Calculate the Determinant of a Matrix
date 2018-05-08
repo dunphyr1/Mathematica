@@ -1,5 +1,8 @@
 (*finds the determinant of a matrix using the Leibniz formula*)
+(*finds determinant using Laplace's forumula*)(*faster*)
 
+
+(*Leibniz*)
 myDet2[A_] := 
   Module[{
     a, b, i, S, Seta,
@@ -129,3 +132,144 @@ does an inversion*)
    
    Return[answer];
    ];
+
+
+
+(*Laplace*)
+myDet3[A_] :=
+  Module[{answer, a, b, B, c, d, i, j, k, val1, val2, col, colset, 
+    counter, det, cProd, debug = True},
+   
+   If[SquareMatrixQ[A] == False,
+    Return["Please input a square matrix"];
+    ];(*end if statement*)
+   
+   Print[MatrixForm[A]];
+   B = A;
+   
+   (*While [ B\[NotEqual] UpperTriangularize[B],*)
+   
+   For[a = 1, a <= Length[A], a++,
+    
+    colset = {};
+    
+    If[A[[a]] == 0*A[[1]],
+     Print["There is a zero row, therefore the determinant is zero"];
+     Return[0];
+     ];(*end if*)
+    
+    
+    For[b = 1, b <= Length[A], b++,
+     
+     col = A[[b, a]];
+     colset = Append[colset, col];
+     
+     If[Length[colset] == Length[A],
+      
+      If[colset == 0*A[[1]],
+        Print[
+         "There is a zero column, therefore the determinant is 0"];
+        Return[0];
+         ];(*end inner if*)
+      
+      ];(*end outer if*)
+     
+     If [ a != b,
+      
+      If [debug == False,
+       Print["This first is part a of A and part b of B"];
+       Print[A[[a]]];
+       Print[A[[b]]];
+       ];(*end debug*)
+      
+      If [A[[a]] == A[[b]],
+       Print[
+        "There is two of the same row in the matrix, so the \
+determinant is 0"];
+       Return[0];
+       ];(*end inner if*)
+      ];(*end outer if*)
+     ];(*end inner for*)
+    ];(*end outer for*)
+   
+   (*all of this will evaluate the matrix and see if there are \
+obvious signs that the*)
+   (*determinant will be 0*)
+   (*the following code will reduce the matrix into echelon form and \
+figure out the determinant of the matrix*)
+   
+   (*This portion makes sure there is a number in the diagonal that \
+is not equal to 0*)
+   (*this portion is about the type 1 elementary matrix*)
+   counter = 0;
+   For[c = 1, c <= Length[A], c++,
+    
+    If[B[[c, c]] == 0,
+      
+      For[d = c, d <= Length[A], d++,
+        
+        If[B[[c, d]] != 0,
+          
+          (*this is the code where it swaps the rows in a matrix*)
+          B[[{c, d}]] = B[[{d, c}]];
+          counter = counter + 1;
+          
+          If [debug == True,
+           
+           
+           Print["There was a row swap, the new matrix is below and \
+under that is the counter"];
+           Print[MatrixForm[B]];
+           Print[counter];
+           
+           ];
+          
+          ];(*end inner if*)
+        ];(*end inner for*)
+      ];(*end outer if*)
+    ];(*end outer for*)
+   
+   
+   If[debug == False,
+    Print["This is how many row swaps the program performed"];
+    Print[counter];
+    Print["This is the current matrix being worked on"];
+    Print[MatrixForm[B]];
+    ];(*end debug*)
+   
+   (*this is the start of elementary matrix II*)
+   (*This looks to see if there are numerical values other than 0 \
+underneath a *)
+   (*given point in the diagonal*)
+   cProd = 1;
+   
+   For[j = 1, j <= Length[A], j++,
+    For[k = 1, k <= Length[A], k++,
+      
+      If[j < k,
+        
+        If[B[[k, j]] != 0,
+          val1 = B[[k, j]];
+          val2 = B[[j, j]];
+          cProd = cProd*val1/val2;
+          B[[k]] = B[[k]] - val1/val2*B[[j]];
+          
+          
+          ];(*end inner if*)
+        ]; (*end  outer if*)
+      ]; (*end inner for*)
+    ]; (*end outer for*)
+   
+   (*this small for loop multiplies all the diagonal entries together*)
+
+   
+   det = 1;
+   For[i = 1, i <= Length[A], i++,
+    det = det*B[[i, i]];
+    
+    ];(*end for loop*)
+   
+   answer = (det*(-1)^counter)/cProd;
+   Return[det];
+   
+   ];(*end module*)
