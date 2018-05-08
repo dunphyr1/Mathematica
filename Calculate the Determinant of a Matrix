@@ -1,0 +1,129 @@
+myDet2[A_] := 
+  Module[{
+    a, b, i, S, Seta,
+    WhereIam, HowLongCycleIs, Perm,
+    WhereIStarted, InversionCount,
+    AccountedFor, Setn, answer,
+    debug = False},
+   
+   If[SquareMatrixQ[A] == False,
+    Return["Cannot find the determinant of a non square matrix"];
+    ];
+   
+   answer = 0;
+   Setn = {};
+   Print[MatrixForm[A]];
+   
+   (*this creates a set of numbers from 1 to a, 
+   where a is the length of the matrix*)
+   For[a = 1, a <= Length[A], a++,
+    Setn = Append[Setn, a];
+    ];(*end for loop*)
+   
+   If[debug == True,
+    Print["This is Setn"];
+    Print[Setn];
+    ];(*end debug*)
+   
+   S = Permutations[Setn];
+   
+   If[debug == True,
+    Print[
+     "This is \!\(\*SubscriptBox[\(S\), \(n\)]\) where n is the \
+length of the matrix"];
+    Print[S];
+    ];(*end debug*)
+   
+   For[ i = 1, i <= Length[S], i++,
+    
+    (*is the permutation being worked on*)
+    Perm = Part[S, i];
+    AccountedFor = Setn;
+    InversionCount = 0;
+    WhereIStarted = 1;
+    
+    If[debug == True,
+     Print["This is the permutation being worked on"];
+     Print[Perm];
+     ];(*end debug*)
+    
+    (*these while loops will count the amount of inversions a \
+permutation does*)
+    (****************************************************************)
+
+    
+    While[AccountedFor != {},
+     
+     AccountedFor = DeleteCases[AccountedFor, WhereIStarted];
+     WhereIam = Perm[[WhereIStarted]];
+     HowLongCycleIs = 1;
+     
+     If[debug == True,
+      Print["This is the accounted for list"];
+      Print[AccountedFor];
+      Print["WhereIam"];
+      Print[WhereIam];
+      ];(*end debug*)
+     
+     While[WhereIam != WhereIStarted,
+      HowLongCycleIs = HowLongCycleIs + 1;
+      AccountedFor = DeleteCases[AccountedFor, WhereIam];
+      WhereIam = Perm[[WhereIam]];
+      
+      If[debug == True,
+       Print["This is how long the cycle is"];
+       Print[HowLongCycleIs];
+       Print["Where i am"];
+       Print[WhereIam];
+       Print["perm[[whereiam]]"];
+       Print[Perm[[WhereIam]]];
+       Print["Accountedfor"];
+       Print[AccountedFor];
+       ];(*end debug*)
+      
+      ];(*end inner while loop*)
+     
+     InversionCount = InversionCount + HowLongCycleIs - 1;
+     (*this if statement prevents an error message from popping up \
+for when*)
+     (*accountedfor is the empty set and is still going through the \
+loop*)
+     If[AccountedFor != {},
+      WhereIStarted = AccountedFor[[1]];
+      ];(*end if*)
+     
+     ];(*end outer while loop*)
+    (********************************************************************)
+\
+
+    
+    If[debug == True,
+     Print["This is the inversion count for the current permutation"];
+     Print[InversionCount];
+     ];(*end if*)
+    
+    (*this is the step to find out what sgn (sigma) is in the formula*)
+\
+
+    (*make a while loop that track all of the times the permutation \
+does an inversion*)
+    
+    Seta = 1;
+    
+    (*this for loop gets all the a's multiplied together*)
+    For[b = 1, b <= Length[Perm], b++,
+     Seta = Seta*A[[b, Perm[[b]]]];
+     
+     If[debug == True,
+      Print["This is A[[b,Perm[[b]]]]"];
+      Print[A[[b, Perm[[b]]]]];
+      ];(*end debug*)
+     
+     ];(*end for*)
+    
+    answer = answer + (-1)^InversionCount*Seta;
+    
+    ];(*end for loop*)
+   
+   Return[answer];
+   ];
