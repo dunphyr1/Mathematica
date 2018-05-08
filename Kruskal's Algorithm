@@ -1,0 +1,190 @@
+Kruskal[verts_, edges_] := 
+  Module[{elist, elist2, debug = False, a, b, c, d, e, f, g, sort, 
+    currente, cost, currente2, currente3, vaccountedfor, vused, 
+    counter, graph, vnames, enames},
+   
+   (*the following code is to check to make sure everything is \
+entered correctly*)
+   (******************************************)
+   
+   If[ListQ[verts] == False,
+    Return["Input the vertices in list form."];
+    ];(*end if*)
+   
+   If[ListQ[edges] == False,
+    Return[
+      "Input the edges in list form.  Have each edge in the form, \
+{Length of edge, Point A, Point B}"];
+    ];(*end if*)
+   
+   For[a = 1, a <= Length[edges], a++,
+    
+    (*this checks to make sure that the value assigned to an edge is*)
+\
+
+    (*the first entry for each edge in the list*)
+    If[NumberQ[edges[[a, 1]]] == False,
+     Return[
+       "Make sure the first entry in edges is the length of the edge. \
+ Have each edge in the form, {Length of edge, Point A, Point B}"];
+     ];(*end if*)
+    
+    If[debug == True,
+     Print["This is the edge being checked"];
+     Print[edges[[a]]];
+     Print["This is the value assigned to the edge"];
+     Print[edges[[a, 1]]];
+     ];(*end debug*)
+    
+    ];(*end for loop*)
+   
+   (******************************************)
+   
+   (*step 1, sort the edges from smallest to largest*)
+    
+   sort = Sort[edges];
+   
+   If[debug == True,
+    Print["This is the sorted list"];
+    Print[sort];
+    ];(*end debug*)
+   
+   vused = {};
+   elist = {};
+   
+   (*this part sorts only the shortes edges an adds them to a list*)
+   (*this also prevents a circuit from being made*)
+   For[b = 1, b <= Length[edges], b++,
+    currente = sort[[b]];
+    
+    If[debug == True,
+     Print["This is the current edge being worked on in b for loop"];
+     Print[currente];
+     ];(*end debug*)
+    
+    (*these if statements check to see if the edge has been used*)
+    If[Not[
+      MemberQ[vused, currente[[2]]] == True && 
+       MemberQ[vused, currente[[3]]] == True],
+     
+     (*sees how may times a vertex is used, 
+     and adds the edge being worked on to a list*)
+     elist = Append[elist, currente];
+     vused = Append[vused, currente[[2]]];
+     vused = Append[vused, currente[[3]]];
+     ];(*end if*)
+    
+    If[debug == True,
+     Print["This is what the edge list looks like"];
+     Print[elist];
+     Print["This is the list of vertices used"];
+     Print[vused];
+     ];(*end debug*)
+    
+    ];(*end for loop*)
+   
+   (*the following code will assign each vertex to a number*)
+   (**)
+   graph = {};
+   For[c = 1, c <= Length[elist], c++,
+    
+    currente2 = elist[[c]];
+    counter = 0;
+    
+    For[d = 1, d <= Length[verts], d++,
+     
+     If[currente2[[2]] == verts[[d]],
+      currente2 = ReplacePart[currente2, 2 -> d];
+      counter = counter + 1;
+      
+      ];(*end first if*)
+     
+     If[currente2[[3]] == verts[[d]],
+      currente2 = ReplacePart[currente2, 3 -> d];
+      counter = counter + 1;
+      
+      ];(*end second if*)
+     
+     If[debug == True,
+      Print["This is the element being worked on"];
+      Print[currente2];
+      ];(*end debug*)
+     
+     (*if the counter equals 2, 
+     then both the beginning and ending point*)
+     (*now have numbers in their place instead of names, 
+     so it will be added*)
+     (*to a new list*)
+     
+     If[counter == 2 && MemberQ[graph, currente2] == False,
+      
+      graph = Append[graph, currente2];
+      
+      If[debug == True,
+       Print["This is what the graph list currently looks like"];
+       Print[graph];
+       ];(*end debug*)
+      
+      ];(*end outer if*)
+     ];(*end inner for loop*)
+    ];(*end outer for loop*)
+   
+   If[debug == True,
+    Print["These are the edges that will form the graph"];
+    Print[graph];
+    ];(*end debug*)
+   
+   
+   (*this will label all the verticies in the graph*)
+   vnames = {};
+   For[e = 1, e <= Length[verts], e++,
+    vnames = Append[vnames, Labeled[e, verts[[e]]]];
+    ];(*end for loop*)
+   
+   If[debug == True,
+    Print["This is the list of vertices and their names"];
+    Print[vnames];
+    ];(*end debug*)
+   
+   enames = {};
+   elist2 = {};
+   
+   For[f = 1, f <= Length[graph], f++,
+    currente3 = graph[[f]];
+    enames = currente3[[1]];
+    elist2 = 
+     Append[elist2, 
+      Labeled[currente3[[2]] <-> currente3[[3]], enames]];
+    
+    If[debug == True,
+     Print["This is the edge being worked on"];
+     Print[currente3];
+     Print["This is the name of the edge"];
+     Print[enames];
+     Print["This is the list of edges that will construct the graph"];
+     Print[elist2];
+     ];(*end debug*)
+    ];(*end for loop*)
+   
+   (*all thats left is to print out the min cost and show the final \
+graph*)
+   
+   cost = 0;
+   For[g = 1, g <= Length[graph], g++,
+    cost = cost + graph[[g, 1]];
+    ];(*end for*)
+   
+   Print["The total cost for the minimum spanning tree is:"];
+   Print[cost];
+   Return[Graph[vnames, elist2]];
+   
+   ];(*end module*)
+   
+   
+   (********************************)
+   (********************************)
+   
+   
+   (*This is how the info should be inputted*)
+   (*fun = {"Saint Louis", "Cleveland", "Minneapolis", "Chicago"};*)
+(*toofun = {{300, "Saint Louis", "Chicago"}, {349, "Cleveland", "Chicago"}, {425, "Minneapolis", "Chicago"}, {541, "Saint Louis", "Cleveland"}, {562, "Saint Louis", "Minneapolis"}, {749, "Minneapolis", "Cleveland"}};*)
