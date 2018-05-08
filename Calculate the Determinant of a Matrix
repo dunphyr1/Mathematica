@@ -1,7 +1,239 @@
+(*finds determinant recursively, calling the "mySquareMatrixQ" module*)
 (*finds the determinant of a matrix using the Leibniz formula*)
 (*finds determinant using Laplace's forumula*)(*faster*)
 
 
+
+(*recursive*)
+mySquareMatrixQ[mat_] :=
+  Module[{a,
+    part1,
+    debug = False
+    },
+   part1 = Length[mat];
+   
+   If[debug == True,
+    Print["This is the length of the giant list"];
+    Print[part1];
+    ];(*end debug*)
+   
+   (*this for loop will test to see there are the same amount of rows \
+as there are columns*)
+   (*the length of input list is the number of rows, 
+   the number of elements in each part of the list are the columns*)
+   
+   For[a = 1, a <= Length[mat], a++,
+    
+    (*debug*)
+    If [debug == True,
+     Print["This is the part the for loop is currently on"];
+     Print[Part[mat, a]];
+     Print["This is the length of the part"];
+     Print[Length[Part[mat, a]]];
+     ];(*end debug*)
+    
+    
+    If [ Length[Part[mat, a]] != part1,
+     Return[False];
+     ];(*end If statement*)
+    
+    ];(*end for loop*)
+   
+   Return[True];
+   
+   ];(*end module*)
+
+
+(******************************************************************************************************************************)
+(*recursive*)
+myDet[A_] :=
+  Module[{
+    a, b, c, d, i, j,
+    answer = 0, NewMat,
+    ZeroRow, rowlength, rows, rownum,
+    ZeroCol, col, colnum, colset,
+    B,
+    debug = True
+    },
+   
+   If[debug == False,
+    Print[MatrixForm[A]];
+    ];(*end debug*)
+   
+   If [ mySquareMatrixQ == False,
+    Return[
+      "Error: cannot find the determinant of a non-square matrix"];
+    ]; (*end if*)
+   
+   rowlength = Length[A];
+   ZeroRow = {};
+   rownum = 1;
+   (*this for loop will find which row has the most zeros in it*)
+   
+   
+   For[  a = 1, a <= rowlength, a++,
+    
+    If [debug == False,
+     Print[
+      "This is the row the loop is working on, and then its the \
+number of 0s in that row"];
+     Print[Part[A, a]];
+     Print[Count[Part[A, a], 0]];
+     ]; (*end debug*)
+    
+    
+    If[ Count[Part[A, a], 0] >= Count[ZeroRow, 0],
+     ZeroRow = Part[A, a];
+     rownum = a;
+     
+     ]; (*end if*)
+    ];(*end for loop*)
+   
+   If[debug == False,
+    Print[
+     "This is the row with the most 0's in it, and this is the row \
+number"];
+    Print[ZeroRow];
+    Print[rownum];
+    ];(*end debug*)
+   
+   (*now I will find the total number of zeros in each column*)
+   (*I will be using two for loops, one to go through rows, 
+   another to state which column to work o in each row*)
+   ZeroCol = {};
+   colnum = 1;
+   
+   For[b = 1, b <= rowlength, b++,
+    
+    If [debug == False,
+     Print["This is the column being worked on"];
+     Print[b];
+     ];(*end debug*)
+    
+    
+    colset = {};
+    
+    For[c = 1, c <= rowlength, c++,
+     
+     rows = Part[A, c];
+     col = Part[rows, b];
+     colset = Append[colset, col];
+     
+     If [c == rowlength,
+      
+      If [debug == False,
+       Print["This is the column being tested"];
+       Print[colset];
+       ];(*end debug*)
+      
+      If[Count[colset, 0] >= Count[ZeroCol, 0],
+       ZeroCol = colset;
+       colnum = b;
+       
+       ];(*end inner if*)
+      ];(*end outer if*)
+     ];(*end inner for*)
+    ];(*end out for*)
+   
+   If [debug == False,
+    Print[
+     "This is the column with the most 0's in it, and this is the col \
+number"];
+    Print[ZeroCol];
+    Print[colnum];
+    ];(*end debug*)
+   
+   (*I will use this so the program will start at the row or column \
+with the most 0's*)
+   (*so the program will be more efficient*)
+   (***************************************************************)
+   
+   
+   (*base case*)
+   If [Length[A] == 1,
+    answer = Total[Total[A]];
+    
+    If [debug == False,
+     Print["This is the 1x1 matrix, the next item is Part[A,1]"];
+     Print[A];
+     Print["this is the answer"];
+     Print[answer];
+     ];(*end debug*)
+    
+    Return[answer];
+    ];(*end if for base case*)
+   
+   (************************************************)
+   (*begin the recurive steps*)
+   (************************************************)
+   
+   
+   (*choosing starting row*)
+   If [Count[ZeroCol, 0] > Count[ZeroRow, 0],
+    
+    For[d = 1, d <= Length[A], d++,
+      B = A;
+      B = Drop[A, {d}, {colnum}];
+      
+      (*This is the optimization step, if the Subscript[a, d, 
+      colnum] = 0, it skips the recursive step*)
+      (*it doesnt need to do the step because the product will end up \
+being 0 anyways*)
+      If[Total[Total[Part[A, {d}, {colnum}]]] != 0,
+       answer = 
+         answer + (-1)^(colnum + d)*
+           Total[Total[Part[A, {d}, {colnum}]]]*myDet[B];
+       ];(*end if*)
+      
+      
+      If[debug == False,
+       Print[
+        "The matrix has more 0's in a col than row, so this is the \
+for loop for it"];
+       Print["This is B"];
+       Print[MatrixForm[B]];
+       Print[Part[A, {d}, {colnum}]];
+       ];(*end debug*)
+      
+      (*colnum is the starting point*)
+      ];
+    ];(*end if statement for more 0s in a col*)
+   
+   (*a row in the matrix has the most 0's*)
+   If[Count[ZeroCol, 0] <= Count[ZeroRow, 0],
+    
+    For[i = 1, i <= Length[A], i++,
+      B = A;
+      B = Drop[A, {rownum}, {i}];
+      
+      (*This is the optimization step, if the Subscript[a, rownum, 
+      i] = 0, it skips the recursive step*)
+      (*it doesnt need to do the step because the product will end up \
+being 0 anyways*)
+      If[Total[Total[Part[A, {rownum}, {i}]]] != 0,
+       answer = 
+         answer + (-1)^(rownum + i)*
+           Total[Total[Part[A, {rownum}, {i}]]]*myDet[B];
+       ];(*end if statement*)
+      
+      If[debug == False,
+       Print[
+        "The matrix has more 0's in a row than col, so this is the \
+for loop for it"];
+       Print["This is B"];
+       Print[MatrixForm[B]];
+       ];(*end debug*)
+      
+      ];(*end for loop*)
+    ];(*end if*)
+   
+   Return[answer];
+   ];(*end module*)
+
+
+
+
+(******************************************************************************************************************************)
 (*Leibniz*)
 myDet2[A_] := 
   Module[{
@@ -135,6 +367,8 @@ does an inversion*)
 
 
 
+
+(********************************************************************************************************************************)
 (*Laplace*)
 myDet3[A_] :=
   Module[{answer, a, b, B, c, d, i, j, k, val1, val2, col, colset, 
